@@ -8,7 +8,8 @@ import { LoginPage } from "./pages/login-page";
 import { NotFoundPage } from "./pages/not-found-page";
 import { RegisterPage } from "./pages/register-page";
 import VerifyOTP from "@/features/auth/pages/VerifyOTP";
-import ForgetPassowrd from "@/features/auth/pages/ForgetPassowrd";
+import ResetPassword from "@/features/auth/pages/ResetPassword";
+import ForgetPassword from "@/features/auth/pages/ForgetPassword";
 
 /**
  * Route tree.
@@ -34,8 +35,8 @@ const routes: RouteObject[] = [
       { path: PATHS.login, element: <LoginPage /> },
       { path: PATHS.verifyOTP, element: <VerifyOTP /> },
       { path: PATHS.register, element: <RegisterPage /> },
-      { path: PATHS.forgotPassword, element: <ForgetPassowrd /> },
-
+      { path: PATHS.forgotPassword, element: <ForgetPassword /> },
+      { path: PATHS.resetPassword, element: <ResetPassword /> },
       // ——— Protected routes ———
       {
         element: <ProtectedRoute />,

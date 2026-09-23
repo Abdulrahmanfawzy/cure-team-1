@@ -4,14 +4,14 @@ import { useForm } from "react-hook-form";
 import type { forgetPasswordPayloadType } from "../../types/auth-types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { forgetPasswordSchema } from "../../schemas/auth-schemas";
-import FormPassword from "../form-inputs/FormPassword";
+import { FormInput } from "../form-inputs/FormInput";
+import { PATHS } from "@/app/router";
+import { Link } from "react-router-dom";
 
 function ForgetPassowrdsForm(): ReactNode {
   const { control, handleSubmit } = useForm<forgetPasswordPayloadType>({
     defaultValues: {
-      oldPassword: "",
-      newPassword: "",
-      confirmNewPassword: "",
+      phone: "",
     },
     resolver: zodResolver(forgetPasswordSchema),
   });
@@ -24,36 +24,28 @@ function ForgetPassowrdsForm(): ReactNode {
       onSubmit={handleSubmit(submitForgetPassowrdsForm)}
       className="space-y-4"
     >
-      {/* Old Password */}
-      <FormPassword
+      {/* Phone */}
+      <FormInput
         control={control}
-        label="Old Password"
-        name="oldPassword"
-        type="password"
-        placeholder="Old Password"
-      />
-
-      {/* New Password */}
-      <FormPassword
-        control={control}
-        label="New Password"
-        name="newPassword"
-        type="password"
-        placeholder="New Password"
-      />
-
-      {/* Confirm New Password */}
-      <FormPassword
-        control={control}
-        label="Confirm New Password"
-        name="confirmNewPassword"
-        type="password"
-        placeholder="Confirm New Password"
+        label="Phone Number"
+        name="phone"
+        type="text"
+        placeholder="Enter your phone number"
       />
 
       <Button type="submit" className="w-full">
-        Change Password
+        Continue
       </Button>
+
+      <p className="text-center text-sm text-app-neutral">
+        Remember your password?{" "}
+        <Link
+          to={PATHS.login}
+          className="text-app-primary bg-transparent! font-medium hover:underline"
+        >
+          Back to Login
+        </Link>
+      </p>
     </form>
   );
 }

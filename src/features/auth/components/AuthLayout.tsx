@@ -11,14 +11,12 @@ function AuthLayout({ children }: { children: ReactNode }): ReactNode {
 
         {/* Page Content */}
         <div className="flex justify-center items-center min-h-screen">
-          <div className="border bg-white space-y-8 border-app-neutral-lightest shadow p-3 max-w-md rounded-md w-full">
-            {children}
-          </div>
+          <div className=" space-y-8 max-w-md w-full">{children}</div>
         </div>
       </div>
 
       {/* Shape / Image in The Right */}
-      <div className="h-screen -z-10 w-6/12 hidden fixed right-0 top-0 lg:block">
+      <div className="h-screen -z-10 w-auto hidden fixed right-0 top-0 lg:block">
         <img src={image} className="h-full w-full" />
       </div>
     </section>

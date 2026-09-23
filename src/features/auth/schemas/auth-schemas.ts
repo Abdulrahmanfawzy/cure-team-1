@@ -22,7 +22,9 @@ export const verifyOtpSchema = z.object({
 });
 
 export const forgetPasswordSchema = z.object({
-  oldPassword: z.string().min(6, "Old password must be at least 6 digits"),
+  phone: z.string().min(11, "Phone number must be at least 11 digits"),
+});
+export const resetPasswordSchema = z.object({
   newPassword: z.string().min(6, "New password must be at least 6 digits"),
   confirmNewPassword: z
     .string()
