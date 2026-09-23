@@ -7,7 +7,7 @@
  */
 export const PATHS = {
   home: "/",
-  // Public — auth (stubs until the auth feature is implemented)
+  // Public
   login: "/login",
   register: "/register",
   forgotPassword: "/forgot-password",
@@ -16,6 +16,7 @@ export const PATHS = {
   // Protected — app shell examples
   dashboard: "/dashboard",
   settings: "/settings",
+  profile: "/profile",
 } as const;
 
 export type PathKey = keyof typeof PATHS;

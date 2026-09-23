@@ -188,8 +188,7 @@
   body {
     @apply bg-background text-foreground font-montserrat;
   }
-
-  .main_contaoner {
-    @apply container mx-auto w-full px-2 md:px-4 lg:max-w-7xl;
-  }
+}
+.main_contaoner {
+  @apply container mx-auto px-2 md:px-4 lg:max-w-7xl;
 }

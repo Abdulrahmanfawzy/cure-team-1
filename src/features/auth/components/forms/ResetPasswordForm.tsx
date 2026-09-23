@@ -4,8 +4,6 @@ import { useForm } from "react-hook-form";
 import type { resetPasswordPayloadType } from "../../types/auth-types";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { PATHS } from "@/app/router";
-import { Link } from "react-router-dom";
 import FormPassword from "../form-inputs/FormPassword";
 import { resetPasswordSchema } from "../../schemas/auth-schemas";
 

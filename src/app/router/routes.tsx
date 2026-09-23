@@ -10,6 +10,7 @@ import { RegisterPage } from "./pages/register-page";
 import VerifyOTP from "@/features/auth/pages/VerifyOTP";
 import ResetPassword from "@/features/auth/pages/ResetPassword";
 import ForgetPassword from "@/features/auth/pages/ForgetPassword";
+import ProfilePage from "@/features/profile/pages/ProfilePage";
 
 /**
  * Route tree.
@@ -42,6 +43,7 @@ const routes: RouteObject[] = [
         element: <ProtectedRoute />,
         children: [
           { path: PATHS.dashboard, element: <DashboardPage /> },
+          { path: PATHS.profile, element: <ProfilePage /> },
           // Add nested protected feature routes here:
           // { path: PATHS.settings, element: <SettingsPage /> },
         ],
