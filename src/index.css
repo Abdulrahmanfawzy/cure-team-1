@@ -18,12 +18,14 @@
   --color-app-secondary: var(--color-secondary);
 
   /* Neutral */
-  --color-app-neutral-lightest: var(--color-neutral-lightest);
   --color-app-neutral: var(--color-neutral);
+  --color-app-neutral-lighter: var(--color-neutral-lighter);
+  --color-app-neutral-lightest: var(--color-neutral-lightest);
   --color-app-neutral-darker: var(--color-neutral-darker);
 
   /* Semantic */
   --color-app-error: var(--color-error);
+  --color-app-info: var(--color-info);
 
   /* Gold */
   --color-app-gold: var(--color-gold);
@@ -89,13 +91,14 @@
   --color-secondary: #05162c;
 
   /* Neutral */
-  --color-neutral-lightest: #f5f6f7;
   --color-neutral: #99a2ab;
+  --color-neutral-lighter: #bbc1c7;
+  --color-neutral-lightest: #f5f6f7;
   --color-neutral-darker: #6d7379;
 
   /* Semantic */
   --color-error: #fc4b4e;
-
+  --color-info: #1490e3;
   /* Gold */
   --color-gold: #f9e000;
 
