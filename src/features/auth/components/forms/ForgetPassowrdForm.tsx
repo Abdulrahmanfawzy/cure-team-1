@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import type { forgetPasswordPayloadType } from "../../types/auth-types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { forgetPasswordSchema } from "../../schemas/auth-schemas";
-import { FormInput } from "../form-inputs/FormInput";
+import { FormInput } from "../../../../components/shared/common/form-inputs/FormInput";
 import { PATHS } from "@/app/router";
 import { Link } from "react-router-dom";
 
