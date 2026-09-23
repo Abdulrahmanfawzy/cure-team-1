@@ -1,12 +1,14 @@
-import { createBrowserRouter, type RouteObject } from 'react-router-dom'
-import { ProtectedRoute } from './guards/protected-route'
-import { RootLayout } from './layouts/root-layout'
-import { PATHS } from './paths'
-import { DashboardPage } from './pages/dashboard-page'
-import { HomePage } from './pages/home-page'
-import { LoginPage } from './pages/login-page'
-import { NotFoundPage } from './pages/not-found-page'
-import { RegisterPage } from './pages/register-page'
+import { createBrowserRouter, type RouteObject } from "react-router-dom";
+import { ProtectedRoute } from "./guards/protected-route";
+import { RootLayout } from "./layouts/root-layout";
+import { PATHS } from "./paths";
+import { DashboardPage } from "./pages/dashboard-page";
+import { HomePage } from "./pages/home-page";
+import { LoginPage } from "./pages/login-page";
+import { NotFoundPage } from "./pages/not-found-page";
+import { RegisterPage } from "./pages/register-page";
+import VerifyOTP from "@/features/auth/pages/VerifyOTP";
+import ForgetPassowrd from "@/features/auth/pages/ForgetPassowrd";
 
 /**
  * Route tree.
@@ -30,7 +32,9 @@ const routes: RouteObject[] = [
       // ——— Public routes ———
       { path: PATHS.home, element: <HomePage /> },
       { path: PATHS.login, element: <LoginPage /> },
+      { path: PATHS.verifyOTP, element: <VerifyOTP /> },
       { path: PATHS.register, element: <RegisterPage /> },
+      { path: PATHS.forgotPassword, element: <ForgetPassowrd /> },
 
       // ——— Protected routes ———
       {
@@ -43,10 +47,10 @@ const routes: RouteObject[] = [
       },
 
       // ——— Catch-all ———
-      { path: '*', element: <NotFoundPage /> },
+      { path: "*", element: <NotFoundPage /> },
     ],
   },
-]
+];
 
 /** App router instance consumed by <RouterProvider /> in App.tsx. */
-export const router = createBrowserRouter(routes)
+export const router = createBrowserRouter(routes);

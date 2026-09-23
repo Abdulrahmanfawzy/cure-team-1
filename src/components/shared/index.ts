@@ -9,4 +9,8 @@
  * - Primitives (Button, Card, Dialog, ...) stay in `components/ui`
  * - No business logic / data fetching here
  */
-export {}
+
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+
+export { Input, Label };
