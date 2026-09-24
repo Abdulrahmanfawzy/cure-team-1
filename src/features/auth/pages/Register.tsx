@@ -5,16 +5,17 @@ import RegisterForm from "../components/forms/RegisterForm";
 
 function Register(): ReactNode {
   return (
-    <AuthLayout>
-      {/* header */}
-      <FormHeader
-        description="Please provide all information required to create your account"
-        title="Sign Up"
-      />
-
-      {/* Form */}
-      <RegisterForm />
-    </AuthLayout>
+    <div className="my-5">
+      <AuthLayout>
+        {/* header */}
+        <FormHeader
+          description="Please provide all information required to create your account"
+          title="Sign Up"
+        />
+        {/* Form */}
+        <RegisterForm />
+      </AuthLayout>
+    </div>
   );
 }
 

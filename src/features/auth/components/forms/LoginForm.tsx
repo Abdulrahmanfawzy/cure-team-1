@@ -7,8 +7,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema } from "../../schemas/auth-schemas";
 import { Link } from "react-router-dom";
 import { PATHS } from "@/app/router";
-import { FormInput } from "../form-inputs/FormInput";
-import FormPassword from "../form-inputs/FormPassword";
+import { FormInput } from "../../../../components/shared/common/form-inputs/FormInput";
+import FormPassword from "../../../../components/shared/common/form-inputs/FormPassword";
 
 function LoginForm(): ReactNode {
   const { control, handleSubmit } = useForm<loginPayloadType>({

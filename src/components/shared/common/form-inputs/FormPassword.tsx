@@ -42,12 +42,13 @@ function FormPassword<Type extends FieldValues>({
       render={({ field, fieldState }) => (
         <div>
           <Field>
-            <FieldLabel>{label}</FieldLabel>
+            <FieldLabel htmlFor={name}>{label}</FieldLabel>
             <InputGroup>
               <InputGroupInput
                 {...field}
                 placeholder={placeholder}
                 type={switchPasswordType ? "text" : "password"}
+                id={name}
                 {...props}
               />
               <InputGroupAddon

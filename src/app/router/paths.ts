@@ -7,14 +7,20 @@
  */
 export const PATHS = {
   home: "/",
-  // Public — auth (stubs until the auth feature is implemented)
+  // Public
   login: "/login",
   register: "/register",
   forgotPassword: "/forgot-password",
   verifyOTP: "verify-otp",
+  resetPassword: "/reset-password",
   // Protected — app shell examples
   dashboard: "/dashboard",
   settings: "/settings",
+
+  // Profile
+  profile: "/profile",
+  personalInformation: "personal-information",
+  passwordManagement: "password-management",
   doctors: "/doctors",
 } as const;
 

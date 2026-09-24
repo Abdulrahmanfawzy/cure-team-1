@@ -1,4 +1,8 @@
-import { createBrowserRouter, type RouteObject } from "react-router-dom";
+import {
+  createBrowserRouter,
+  Navigate,
+  type RouteObject,
+} from "react-router-dom";
 import { ProtectedRoute } from "./guards/protected-route";
 import { RootLayout } from "./layouts/root-layout";
 import { PATHS } from "./paths";
@@ -8,6 +12,12 @@ import { LoginPage } from "./pages/login-page";
 import { NotFoundPage } from "./pages/not-found-page";
 import { RegisterPage } from "./pages/register-page";
 import VerifyOTP from "@/features/auth/pages/VerifyOTP";
+import ResetPassword from "@/features/auth/pages/ResetPassword";
+import ForgetPassword from "@/features/auth/pages/ForgetPassword";
+import ProfilePage from "@/features/profile/pages/PasswordManagement";
+import ProfileLayout from "@/features/profile/pages/ProfileLayout";
+import PasswordManagement from "@/features/profile/pages/PasswordManagement";
+import PersonalInformation from "@/features/profile/pages/PersonalInformation";
 import ForgetPassowrd from "@/features/auth/pages/ForgetPassowrd";
 import DoctorsPage from "@/features/doctors/pages/DoctorsPage";
 
@@ -35,7 +45,8 @@ const routes: RouteObject[] = [
       { path: PATHS.login, element: <LoginPage /> },
       { path: PATHS.verifyOTP, element: <VerifyOTP /> },
       { path: PATHS.register, element: <RegisterPage /> },
-      { path: PATHS.forgotPassword, element: <ForgetPassowrd /> },
+      { path: PATHS.forgotPassword, element: <ForgetPassword /> },
+      { path: PATHS.resetPassword, element: <ResetPassword /> },
       { path: PATHS.doctors, element: <DoctorsPage /> },
 
       // ——— Protected routes ———
@@ -43,8 +54,25 @@ const routes: RouteObject[] = [
         element: <ProtectedRoute />,
         children: [
           { path: PATHS.dashboard, element: <DashboardPage /> },
-          // Add nested protected feature routes here:
-          // { path: PATHS.settings, element: <SettingsPage /> },
+          // Profile
+          {
+            path: PATHS.profile,
+            element: <ProfileLayout />,
+            children: [
+              {
+                index: true,
+                element: <Navigate to={PATHS.personalInformation} replace />,
+              },
+              {
+                path: PATHS.passwordManagement,
+                element: <PasswordManagement />,
+              },
+              {
+                path: PATHS.personalInformation,
+                element: <PersonalInformation />,
+              },
+            ],
+          },
         ],
       },
 

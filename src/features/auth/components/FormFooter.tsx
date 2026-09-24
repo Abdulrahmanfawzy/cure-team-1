@@ -40,11 +40,11 @@ function FormFooter({ mode }: FormFooterProps) {
     <div className="w-full space-y-4">
       {/* Divider */}
       <div className="flex items-center gap-4">
-        <div className="h-px flex-1 bg-[#b9c0c8]" />
+        <div className="h-px flex-1 bg-app-neutral" />
 
         <span className="text-base leading-none text-app-neutral">or</span>
 
-        <div className="h-px flex-1 bg-[#b9c0c8]" />
+        <div className="h-px flex-1 bg-app-neutral" />
       </div>
 
       {/* Google Button */}
@@ -52,7 +52,7 @@ function FormFooter({ mode }: FormFooterProps) {
         type="button"
         variant="secondary"
         size="lg"
-        className="flex w-full items-center justify-center gap-4"
+        className="flex w-full bg-transparent! items-center justify-center gap-4"
       >
         <GoogleIcon />
         <span>{mode} with Google</span>
@@ -64,11 +64,11 @@ function FormFooter({ mode }: FormFooterProps) {
           {switchText}
         </span>
 
-        <Link to={switchPath}>
+        <Link className="bg-transparent!" to={switchPath}>
           <Button
             type="button"
             variant="link"
-            className="text-app-primary px-1 py-0 text-sm"
+            className="text-app-primary bg-transparent! px-1 py-0 text-sm"
           >
             {switchLabel}
           </Button>
