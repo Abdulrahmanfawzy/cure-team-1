@@ -9,6 +9,7 @@ import { NotFoundPage } from "./pages/not-found-page";
 import { RegisterPage } from "./pages/register-page";
 import VerifyOTP from "@/features/auth/pages/VerifyOTP";
 import ForgetPassowrd from "@/features/auth/pages/ForgetPassowrd";
+import DoctorsPage from "@/features/doctors/pages/DoctorsPage";
 
 /**
  * Route tree.
@@ -35,6 +36,7 @@ const routes: RouteObject[] = [
       { path: PATHS.verifyOTP, element: <VerifyOTP /> },
       { path: PATHS.register, element: <RegisterPage /> },
       { path: PATHS.forgotPassword, element: <ForgetPassowrd /> },
+      { path: PATHS.doctors, element: <DoctorsPage /> },
 
       // ——— Protected routes ———
       {
