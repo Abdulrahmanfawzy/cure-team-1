@@ -1,6 +1,6 @@
 import { PATHS } from "@/app/router";
 import { cn } from "cn";
-import { LogOutIcon } from "lucide-react";
+import { LockKeyhole, LogOutIcon, User } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 
 function Links() {
@@ -18,7 +18,10 @@ function Links() {
               "border-2 border-app-primary",
           )}
         >
-          <p className="text-app-secondary">Personal information</p>
+          <div className="flex justify-center items-center gap-2">
+            <User size={24} />
+            <p className="text-app-secondary">Personal information</p>
+          </div>
         </div>
       </Link>
 
@@ -29,7 +32,10 @@ function Links() {
             isActive(PATHS.passwordManagement) && "border-2 border-app-primary",
           )}
         >
-          <p className="text-app-secondary">Password management</p>
+          <div className="flex justify-center items-center gap-2">
+            <LockKeyhole size={24} />
+            <p className="text-app-secondary">Password management</p>
+          </div>
         </div>
       </Link>
 

@@ -14,7 +14,6 @@ import { RegisterPage } from "./pages/register-page";
 import VerifyOTP from "@/features/auth/pages/VerifyOTP";
 import ResetPassword from "@/features/auth/pages/ResetPassword";
 import ForgetPassword from "@/features/auth/pages/ForgetPassword";
-import ProfilePage from "@/features/profile/pages/PasswordManagement";
 import ProfileLayout from "@/features/profile/pages/ProfileLayout";
 import PasswordManagement from "@/features/profile/pages/PasswordManagement";
 import PersonalInformation from "@/features/profile/pages/PersonalInformation";
