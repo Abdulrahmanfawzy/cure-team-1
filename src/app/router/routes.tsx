@@ -1,4 +1,8 @@
-import { createBrowserRouter, type RouteObject } from "react-router-dom";
+import {
+  createBrowserRouter,
+  Navigate,
+  type RouteObject,
+} from "react-router-dom";
 import { ProtectedRoute } from "./guards/protected-route";
 import { RootLayout } from "./layouts/root-layout";
 import { PATHS } from "./paths";
@@ -10,7 +14,10 @@ import { RegisterPage } from "./pages/register-page";
 import VerifyOTP from "@/features/auth/pages/VerifyOTP";
 import ResetPassword from "@/features/auth/pages/ResetPassword";
 import ForgetPassword from "@/features/auth/pages/ForgetPassword";
-import ProfilePage from "@/features/profile/pages/ProfilePage";
+import ProfilePage from "@/features/profile/pages/PasswordManagement";
+import ProfileLayout from "@/features/profile/pages/ProfileLayout";
+import PasswordManagement from "@/features/profile/pages/PasswordManagement";
+import PersonalInformation from "@/features/profile/pages/PersonalInformation";
 
 /**
  * Route tree.
@@ -43,9 +50,25 @@ const routes: RouteObject[] = [
         element: <ProtectedRoute />,
         children: [
           { path: PATHS.dashboard, element: <DashboardPage /> },
-          { path: PATHS.profile, element: <ProfilePage /> },
-          // Add nested protected feature routes here:
-          // { path: PATHS.settings, element: <SettingsPage /> },
+          // Profile
+          {
+            path: PATHS.profile,
+            element: <ProfileLayout />,
+            children: [
+              {
+                index: true,
+                element: <Navigate to={PATHS.personalInformation} replace />,
+              },
+              {
+                path: PATHS.passwordManagement,
+                element: <PasswordManagement />,
+              },
+              {
+                path: PATHS.personalInformation,
+                element: <PersonalInformation />,
+              },
+            ],
+          },
         ],
       },
 
