@@ -15,6 +15,7 @@ export const PATHS = {
   // Protected — app shell examples
   dashboard: "/dashboard",
   settings: "/settings",
+  doctors: "/doctors",
 } as const;
 
 export type PathKey = keyof typeof PATHS;
