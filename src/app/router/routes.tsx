@@ -18,8 +18,9 @@ import ProfilePage from "@/features/profile/pages/PasswordManagement";
 import ProfileLayout from "@/features/profile/pages/ProfileLayout";
 import PasswordManagement from "@/features/profile/pages/PasswordManagement";
 import PersonalInformation from "@/features/profile/pages/PersonalInformation";
-import ForgetPassowrd from "@/features/auth/pages/ForgetPassowrd";
+// import ForgetPassowrd from "@/features/auth/pages/ForgetPassowrd";
 import DoctorsPage from "@/features/doctors/pages/DoctorsPage";
+import BookPage from "@/features/book/pages/BookPage";
 
 /**
  * Route tree.
@@ -72,6 +73,11 @@ const routes: RouteObject[] = [
                 element: <PersonalInformation />,
               },
             ],
+          },
+          // book
+          {
+            path: PATHS.book,
+            element: <BookPage />,
           },
         ],
       },
