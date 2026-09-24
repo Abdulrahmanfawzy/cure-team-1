@@ -17,6 +17,7 @@ import ForgetPassword from "@/features/auth/pages/ForgetPassword";
 import ProfileLayout from "@/features/profile/pages/ProfileLayout";
 import PasswordManagement from "@/features/profile/pages/PasswordManagement";
 import PersonalInformation from "@/features/profile/pages/PersonalInformation";
+ import DoctorsPage from "@/features/doctors/pages/DoctorsPage";
 
 /**
  * Route tree.
@@ -44,6 +45,9 @@ const routes: RouteObject[] = [
       { path: PATHS.register, element: <RegisterPage /> },
       { path: PATHS.forgotPassword, element: <ForgetPassword /> },
       { path: PATHS.resetPassword, element: <ResetPassword /> },
+      { path: PATHS.forgotPassword, element: <ForgetPassword /> },
+      { path: PATHS.doctors, element: <DoctorsPage /> },
+
       // ——— Protected routes ———
       {
         element: <ProtectedRoute />,
