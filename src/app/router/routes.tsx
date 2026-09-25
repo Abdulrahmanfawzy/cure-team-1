@@ -12,12 +12,10 @@ import { LoginPage } from "./pages/login-page";
 import { NotFoundPage } from "./pages/not-found-page";
 import { RegisterPage } from "./pages/register-page";
 import VerifyOTP from "@/features/auth/pages/VerifyOTP";
-import ResetPassword from "@/features/auth/pages/ResetPassword";
-import ForgetPassword from "@/features/auth/pages/ForgetPassword";
 import ProfileLayout from "@/features/profile/pages/ProfileLayout";
 import PasswordManagement from "@/features/profile/pages/PasswordManagement";
 import PersonalInformation from "@/features/profile/pages/PersonalInformation";
- import DoctorsPage from "@/features/doctors/pages/DoctorsPage";
+import DoctorsPage from "@/features/doctors/pages/DoctorsPage";
 
 /**
  * Route tree.
@@ -43,9 +41,6 @@ const routes: RouteObject[] = [
       { path: PATHS.login, element: <LoginPage /> },
       { path: PATHS.verifyOTP, element: <VerifyOTP /> },
       { path: PATHS.register, element: <RegisterPage /> },
-      { path: PATHS.forgotPassword, element: <ForgetPassword /> },
-      { path: PATHS.resetPassword, element: <ResetPassword /> },
-      { path: PATHS.forgotPassword, element: <ForgetPassword /> },
       { path: PATHS.doctors, element: <DoctorsPage /> },
 
       // ——— Protected routes ———

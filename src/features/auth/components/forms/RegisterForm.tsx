@@ -5,8 +5,7 @@ import FormFooter from "../FormFooter";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { registerSchema } from "../../schemas/auth-schemas";
 import type { registerPayloadtype } from "../../types/auth-types";
-import FormPassword from "../../../../components/shared/common/form-inputs/FormPassword";
-import { FormInput } from "../../../../components/shared/common/form-inputs/FormInput";
+import { FormInput } from "@/components/shared/common/form-inputs/FormInput";
 
 function RegisterForm(): ReactNode {
   const { control, handleSubmit } = useForm<registerPayloadtype>({
@@ -14,8 +13,6 @@ function RegisterForm(): ReactNode {
       name: "",
       email: "",
       phone: "",
-      password: "",
-      rePassword: "",
     },
     resolver: zodResolver(registerSchema),
   });
@@ -50,24 +47,6 @@ function RegisterForm(): ReactNode {
         label="Phone number"
         type="text"
         placeholder="Enter your number"
-      />
-
-      {/* Password */}
-      <FormPassword
-        control={control}
-        label="Password"
-        name="password"
-        placeholder="Password"
-        type="password"
-      />
-
-      {/* Confirme Password */}
-      <FormPassword
-        control={control}
-        label="Confirm Password"
-        name="rePassword"
-        placeholder="Confirm Password"
-        type="password"
       />
 
       <Button type="submit" className="w-full">
