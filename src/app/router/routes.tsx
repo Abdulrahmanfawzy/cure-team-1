@@ -14,12 +14,13 @@ import { RegisterPage } from "./pages/register-page";
 import VerifyOTP from "@/features/auth/pages/VerifyOTP";
 import ResetPassword from "@/features/auth/pages/ResetPassword";
 import ForgetPassword from "@/features/auth/pages/ForgetPassword";
-import ProfilePage from "@/features/profile/pages/PasswordManagement";
+// import ProfilePage from "@/features/profile/pages/PasswordManagement"; plz resolve this
 import ProfileLayout from "@/features/profile/pages/ProfileLayout";
 import PasswordManagement from "@/features/profile/pages/PasswordManagement";
 import PersonalInformation from "@/features/profile/pages/PersonalInformation";
-import ForgetPassowrd from "@/features/auth/pages/ForgetPassowrd";
+// import ForgetPassowrd from "@/features/auth/pages/ForgetPassowrd"; and this
 import DoctorsPage from "@/features/doctors/pages/DoctorsPage";
+import DoctorDetailsPage from "@/features/doctorDetails/pages/DoctorDetailsPage";
 
 /**
  * Route tree.
@@ -48,6 +49,7 @@ const routes: RouteObject[] = [
       { path: PATHS.forgotPassword, element: <ForgetPassword /> },
       { path: PATHS.resetPassword, element: <ResetPassword /> },
       { path: PATHS.doctors, element: <DoctorsPage /> },
+      {path: PATHS.doctorDetails, element: <DoctorDetailsPage/>},
 
       // ——— Protected routes ———
       {
