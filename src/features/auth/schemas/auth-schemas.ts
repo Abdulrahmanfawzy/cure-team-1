@@ -11,24 +11,12 @@ export const registerSchema = z.object({
 });
 
 export const verifyOtpSchema = z.object({
-  otp: z
+  code: z
     .string()
     .trim()
     .min(1, "OTP is required")
     .length(4, "OTP must be 4 digits")
     .regex(/^\d+$/, "OTP must contain only numbers"),
+  type: z.string(),
+  phone: z.string(),
 });
-
-// export const forgetPasswordSchema = z.object({
-//   phone: z.string().trim().min(11, "Phone number must be at least 11 digits"),
-// });
-// export const resetPasswordSchema = z.object({
-//   newPassword: z
-//     .string()
-//     .trim()
-//     .min(6, "New password must be at least 6 digits"),
-//   confirmNewPassword: z
-//     .string()
-//     .trim()
-//     .min(6, "Confirm new password must be at least 6 digits"),
-// });

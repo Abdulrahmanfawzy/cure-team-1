@@ -4,11 +4,12 @@ import { useForm } from "react-hook-form";
 import FormFooter from "../FormFooter";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { registerSchema } from "../../schemas/auth-schemas";
-import type { registerPayloadtype } from "../../types/auth-types";
+import type { registerPayload } from "../../types/auth-types";
 import { FormInput } from "@/components/shared/common/form-inputs/FormInput";
+import { FieldSeparator } from "@/components/ui/field";
 
 function RegisterForm(): ReactNode {
-  const { control, handleSubmit } = useForm<registerPayloadtype>({
+  const { control, handleSubmit } = useForm<registerPayload>({
     defaultValues: {
       name: "",
       email: "",
@@ -17,7 +18,7 @@ function RegisterForm(): ReactNode {
     resolver: zodResolver(registerSchema),
   });
 
-  const submitRegisterForm = (formData: registerPayloadtype) => {
+  const submitRegisterForm = (formData: registerPayload) => {
     console.log(formData);
   };
   return (

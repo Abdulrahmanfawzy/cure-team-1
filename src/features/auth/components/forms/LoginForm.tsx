@@ -2,20 +2,20 @@ import { Button } from "@/components/ui/button";
 import { type ReactNode } from "react";
 import { useForm } from "react-hook-form";
 import FormFooter from "../FormFooter";
-import type { loginPayloadType } from "../../types/auth-types";
+import type { loginPayload } from "../../types/auth-types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema } from "../../schemas/auth-schemas";
 import { FormInput } from "@/components/shared/common/form-inputs/FormInput";
 
 function LoginForm(): ReactNode {
-  const { control, handleSubmit } = useForm<loginPayloadType>({
+  const { control, handleSubmit } = useForm<loginPayload>({
     defaultValues: {
       phone: "",
     },
     resolver: zodResolver(loginSchema),
   });
 
-  const submitLoginForm = (formData: loginPayloadType) => {
+  const submitLoginForm = (formData: loginPayload) => {
     console.log(formData);
   };
   return (
