@@ -1,5 +1,16 @@
-export * from "./header";
-export * from "./footer";
-export * from "./profile-menu";
-export * from "./star-rating";
-export {}
+/**
+ * Shared UI components.
+ *
+ * Reusable, presentational components used across multiple features
+ * (e.g. PageContainer, LoadingState, EmptyState, SearchInput).
+ *
+ * Rules:
+ * - Feature-specific components stay in `features/<name>/components`
+ * - Primitives (Button, Card, Dialog, ...) stay in `components/ui`
+ * - No business logic / data fetching here
+ */
+
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+
+export { Input, Label };
