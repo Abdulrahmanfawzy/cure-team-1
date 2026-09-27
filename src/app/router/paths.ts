@@ -1,3 +1,4 @@
+
 /**
  * Centralized route path constants.
  *
@@ -23,6 +24,7 @@ export const PATHS = {
   personalInformation: "personal-information",
   passwordManagement: "password-management",
   doctors: "/doctors",
+  doctorDetails: "/doctors-details",
 
   // book
   appointment: "/appointment",
