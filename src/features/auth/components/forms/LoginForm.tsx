@@ -32,6 +32,7 @@ function LoginForm(): ReactNode {
       <Button type="submit" className="w-full">
         Sign In
       </Button>
+
       <FormFooter mode="Sign in" />
     </form>
   );

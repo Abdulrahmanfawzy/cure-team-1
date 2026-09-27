@@ -5,7 +5,7 @@ import type { ReactNode } from "react";
 function AuthLayout({ children }: { children: ReactNode }): ReactNode {
   return (
     <section className="flex flex-row items-center">
-      <div className="main_contaoner flex-1">
+      <div className="main_container flex-1">
         {/* Icon  */}
         <HeartPulse className="fixed top-2 left-3 lg:left-16 lg:top-10 size-8 text-app-primary" />
 
@@ -17,7 +17,7 @@ function AuthLayout({ children }: { children: ReactNode }): ReactNode {
 
       {/* Shape / Image in The Right */}
       <div className="flex-1 hidden lg:block">
-        <div className="h-screen -z-10 w-6/12  fixed right-0 top-0 ">
+        <div className="h-screen z-1 w-1/2  fixed right-0 top-0 ">
           <img src={image} className="h-full w-full" />
         </div>
       </div>

@@ -10,17 +10,22 @@ export const PATHS = {
   // Public
   login: "/login",
   register: "/register",
-  forgotPassword: "/forgot-password",
   verifyOTP: "/verify-otp",
   // Protected — app shell examples
   dashboard: "/dashboard",
   settings: "/settings",
+  contact: "/contact",
 
   // Profile
   profile: "/profile",
   personalInformation: "personal-information",
   passwordManagement: "password-management",
   doctors: "/doctors",
+  doctorDetails: "/doctors-details",
+
+  // book
+  appointment: "/appointment",
+  book: "/book",
 } as const;
 
 export type PathKey = keyof typeof PATHS;
