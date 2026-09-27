@@ -21,6 +21,7 @@ import PersonalInformation from "@/features/profile/pages/PersonalInformation";
 // import ForgetPassowrd from "@/features/auth/pages/ForgetPassowrd";
 import DoctorsPage from "@/features/doctors/pages/DoctorsPage";
 import AppointmentPage from "@/features/appointment/pages/AppointmentPage";
+import BookPage from "@/features/book/pages/BookPage";
 
 /**
  * Route tree.
@@ -77,6 +78,11 @@ const routes: RouteObject[] = [
 
           // book appointment
           { path: PATHS.appointment, element: <AppointmentPage /> },
+          // book
+          {
+            path: PATHS.book,
+            element: <BookPage />,
+          },
         ],
       },
 

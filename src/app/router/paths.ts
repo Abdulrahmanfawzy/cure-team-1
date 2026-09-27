@@ -25,6 +25,9 @@ export const PATHS = {
 
   // book
   appointment: "/appointment",
+  book: "/book"
 } as const;
 
 export type PathKey = keyof typeof PATHS;
+
+
