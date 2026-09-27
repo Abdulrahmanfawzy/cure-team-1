@@ -22,6 +22,11 @@ export const PATHS = {
   personalInformation: "personal-information",
   passwordManagement: "password-management",
   doctors: "/doctors",
+
+  // book
+  book: "/book"
 } as const;
 
 export type PathKey = keyof typeof PATHS;
+
+
