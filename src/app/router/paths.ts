@@ -16,6 +16,7 @@ export const PATHS = {
   // Protected — app shell examples
   dashboard: "/dashboard",
   settings: "/settings",
+  contact: "/contact",
 
   // Profile
   profile: "/profile",

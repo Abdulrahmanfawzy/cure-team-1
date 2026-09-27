@@ -22,6 +22,7 @@ import PersonalInformation from "@/features/profile/pages/PersonalInformation";
 import DoctorsPage from "@/features/doctors/pages/DoctorsPage";
 import AppointmentPage from "@/features/appointment/pages/AppointmentPage";
 import BookPage from "@/features/book/pages/BookPage";
+import ContactPage from "@/features/contact/pages/contact-page";
 
 /**
  * Route tree.
@@ -51,11 +52,14 @@ const routes: RouteObject[] = [
       { path: PATHS.resetPassword, element: <ResetPassword /> },
       { path: PATHS.doctors, element: <DoctorsPage /> },
 
-      // ——— Protected routes ———
       {
         element: <ProtectedRoute />,
         children: [
           { path: PATHS.dashboard, element: <DashboardPage /> },
+          {
+            path: PATHS.contact,
+            element: <ContactPage />,
+          },
           // Profile
           {
             path: PATHS.profile,
