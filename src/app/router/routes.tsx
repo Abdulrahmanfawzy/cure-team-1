@@ -20,6 +20,7 @@ import PasswordManagement from "@/features/profile/pages/PasswordManagement";
 import PersonalInformation from "@/features/profile/pages/PersonalInformation";
 // import ForgetPassowrd from "@/features/auth/pages/ForgetPassowrd";
 import DoctorsPage from "@/features/doctors/pages/DoctorsPage";
+import AppointmentPage from "@/features/appointment/pages/AppointmentPage";
 import BookPage from "@/features/book/pages/BookPage";
 
 /**
@@ -74,6 +75,9 @@ const routes: RouteObject[] = [
               },
             ],
           },
+
+          // book appointment
+          { path: PATHS.appointment, element: <AppointmentPage /> },
           // book
           {
             path: PATHS.book,

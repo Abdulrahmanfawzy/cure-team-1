@@ -24,6 +24,7 @@ export const PATHS = {
   doctors: "/doctors",
 
   // book
+  appointment: "/appointment",
   book: "/book"
 } as const;
 
