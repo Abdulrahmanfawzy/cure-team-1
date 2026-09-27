@@ -4,23 +4,21 @@ import { useForm } from "react-hook-form";
 import FormFooter from "../FormFooter";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { registerSchema } from "../../schemas/auth-schemas";
-import type { registerPayloadtype } from "../../types/auth-types";
-import FormPassword from "../../../../components/shared/common/form-inputs/FormPassword";
-import { FormInput } from "../../../../components/shared/common/form-inputs/FormInput";
+import type { registerPayload } from "../../types/auth-types";
+import { FormInput } from "@/components/shared/common/form-inputs/FormInput";
+import { FieldSeparator } from "@/components/ui/field";
 
 function RegisterForm(): ReactNode {
-  const { control, handleSubmit } = useForm<registerPayloadtype>({
+  const { control, handleSubmit } = useForm<registerPayload>({
     defaultValues: {
       name: "",
       email: "",
       phone: "",
-      password: "",
-      rePassword: "",
     },
     resolver: zodResolver(registerSchema),
   });
 
-  const submitRegisterForm = (formData: registerPayloadtype) => {
+  const submitRegisterForm = (formData: registerPayload) => {
     console.log(formData);
   };
   return (
@@ -50,24 +48,6 @@ function RegisterForm(): ReactNode {
         label="Phone number"
         type="text"
         placeholder="Enter your number"
-      />
-
-      {/* Password */}
-      <FormPassword
-        control={control}
-        label="Password"
-        name="password"
-        placeholder="Password"
-        type="password"
-      />
-
-      {/* Confirme Password */}
-      <FormPassword
-        control={control}
-        label="Confirm Password"
-        name="rePassword"
-        placeholder="Confirm Password"
-        type="password"
       />
 
       <Button type="submit" className="w-full">

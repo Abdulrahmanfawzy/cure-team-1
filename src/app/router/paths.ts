@@ -1,4 +1,3 @@
-
 /**
  * Centralized route path constants.
  *
@@ -11,9 +10,7 @@ export const PATHS = {
   // Public
   login: "/login",
   register: "/register",
-  forgotPassword: "/forgot-password",
-  verifyOTP: "verify-otp",
-  resetPassword: "/reset-password",
+  verifyOTP: "/verify-otp",
   // Protected — app shell examples
   dashboard: "/dashboard",
   settings: "/settings",
@@ -28,9 +25,7 @@ export const PATHS = {
 
   // book
   appointment: "/appointment",
-  book: "/book"
+  book: "/book",
 } as const;
 
 export type PathKey = keyof typeof PATHS;
-
-

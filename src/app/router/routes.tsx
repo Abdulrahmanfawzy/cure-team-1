@@ -11,90 +11,88 @@ import { HomePage } from "./pages/home-page";
 import { LoginPage } from "./pages/login-page";
 import { NotFoundPage } from "./pages/not-found-page";
 import { RegisterPage } from "./pages/register-page";
-import VerifyOTP from "@/features/auth/pages/VerifyOTP";
-import ResetPassword from "@/features/auth/pages/ResetPassword";
-import ForgetPassword from "@/features/auth/pages/ForgetPassword";
-// import ProfilePage from "@/features/profile/pages/PasswordManagement"; plz resolve this
 import ProfileLayout from "@/features/profile/pages/ProfileLayout";
 import PasswordManagement from "@/features/profile/pages/PasswordManagement";
 import PersonalInformation from "@/features/profile/pages/PersonalInformation";
-// import ForgetPassowrd from "@/features/auth/pages/ForgetPassowrd";
 import DoctorsPage from "@/features/doctors/pages/DoctorsPage";
 import DoctorDetailsPage from "@/features/doctorDetails/pages/DoctorDetailsPage";
 import AppointmentPage from "@/features/appointment/pages/AppointmentPage";
 import BookPage from "@/features/book/pages/BookPage";
 import ContactPage from "@/features/contact/pages/contact-page";
+import VerifyPage from "./pages/verify-page";
+import MainLayout from "./layouts/main-layout";
+import AuthLayout from "./layouts/auth-layout";
 
-/**
- * Route tree.
- *
- * Structure:
- * - RootLayout wraps every route (global chrome + Toaster + <Outlet />)
- * - Public routes render directly
- * - Protected routes nest under <ProtectedRoute />
- * - Feature routes: import page components from `features/<name>` and
- *   add them here (or compose nested children per feature)
- *
- * Adding routes:
- * 1. Add the path to `paths.ts`
- * 2. Create/reuse a page component
- * 3. Register it below (public, protected, or nested)
- */
 const routes: RouteObject[] = [
   {
     element: <RootLayout />,
     children: [
-      // ——— Public routes ———
-      { path: PATHS.home, element: <HomePage /> },
-      { path: PATHS.login, element: <LoginPage /> },
-      { path: PATHS.verifyOTP, element: <VerifyOTP /> },
-      { path: PATHS.register, element: <RegisterPage /> },
-      { path: PATHS.forgotPassword, element: <ForgetPassword /> },
-      { path: PATHS.resetPassword, element: <ResetPassword /> },
-      { path: PATHS.doctors, element: <DoctorsPage /> },
-      { path: PATHS.doctorDetails, element: <DoctorDetailsPage /> },
-
+      // main Content Layout
       {
-        element: <ProtectedRoute />,
+        element: <MainLayout />,
         children: [
-          { path: PATHS.dashboard, element: <DashboardPage /> },
-          // Profile
+          // ——— Public routes ———
+          { path: PATHS.home, element: <HomePage /> },
+
+          { path: PATHS.doctors, element: <DoctorsPage /> },
+          { path: PATHS.doctorDetails, element: <DoctorDetailsPage /> },
+
+          // ——— Protected routes ———
           {
-            path: PATHS.profile,
-            element: <ProfileLayout />,
+            element: <ProtectedRoute />,
             children: [
+              { path: PATHS.dashboard, element: <DashboardPage /> },
+              // Profile
               {
-                index: true,
-                element: <Navigate to={PATHS.personalInformation} replace />,
+                path: PATHS.profile,
+                element: <ProfileLayout />,
+                children: [
+                  {
+                    index: true,
+                    element: (
+                      <Navigate to={PATHS.personalInformation} replace />
+                    ),
+                  },
+                  {
+                    path: PATHS.passwordManagement,
+                    element: <PasswordManagement />,
+                  },
+                  {
+                    path: PATHS.personalInformation,
+                    element: <PersonalInformation />,
+                  },
+                ],
               },
+
+              // book appointment
+              { path: PATHS.appointment, element: <AppointmentPage /> },
+              // book
               {
-                path: PATHS.passwordManagement,
-                element: <PasswordManagement />,
-              },
-              {
-                path: PATHS.personalInformation,
-                element: <PersonalInformation />,
+                path: PATHS.book,
+                element: <BookPage />,
               },
             ],
           },
 
-          // book appointment
-          { path: PATHS.appointment, element: <AppointmentPage /> },
-          // book
           {
-            path: PATHS.book,
-            element: <BookPage />,
+            path: PATHS.contact,
+            element: <ContactPage />,
           },
+
+          // ——— Catch-all ———
+          { path: "*", element: <NotFoundPage /> },
         ],
       },
 
+      // Auth Layout
       {
-        path: PATHS.contact,
-        element: <ContactPage />,
+        element: <AuthLayout />,
+        children: [
+          { path: PATHS.login, element: <LoginPage /> },
+          { path: PATHS.verifyOTP, element: <VerifyPage /> },
+          { path: PATHS.register, element: <RegisterPage /> },
+        ],
       },
-
-      // ——— Catch-all ———
-      { path: "*", element: <NotFoundPage /> },
     ],
   },
 ];

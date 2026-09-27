@@ -11,20 +11,22 @@ import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { FieldError } from "@/components/ui/field";
-import type { verifyOtpPayloadType } from "../../types/auth-types";
+import type { verifyOtpPayload } from "../../types/auth-types";
 import { verifyOtpSchema } from "../../schemas/auth-schemas";
 
 function VerifyOTPForm(): ReactNode {
   const [otpTimeInvalid, setOtpTimeInvalid] = useState(60);
 
-  const { control, handleSubmit } = useForm<verifyOtpPayloadType>({
+  const { control, handleSubmit } = useForm<verifyOtpPayload>({
     defaultValues: {
-      otp: "",
+      code: "",
+      phone: "",
+      type: "",
     },
     resolver: zodResolver(verifyOtpSchema),
   });
 
-  const submitVerifyOtpForm = (formData: verifyOtpPayloadType) => {
+  const submitVerifyOtpForm = (formData: verifyOtpPayload) => {
     console.log(formData);
   };
 
@@ -44,7 +46,7 @@ function VerifyOTPForm(): ReactNode {
     >
       <div className="flex flex-col items-center gap-2">
         <Controller
-          name="otp"
+          name="code"
           control={control}
           render={({ field, fieldState }) => (
             <>
