@@ -17,13 +17,20 @@ export const PATHS = {
   // Protected — app shell examples
   dashboard: "/dashboard",
   settings: "/settings",
+  contact: "/contact",
 
   // Profile
   profile: "/profile",
   personalInformation: "personal-information",
   passwordManagement: "password-management",
   doctors: "/doctors",
-  doctorDetails: "/doctors-details"
+  doctorDetails: "/doctors-details",
+
+  // book
+  appointment: "/appointment",
+  book: "/book"
 } as const;
 
 export type PathKey = keyof typeof PATHS;
+
+

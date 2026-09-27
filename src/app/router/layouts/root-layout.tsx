@@ -1,23 +1,26 @@
-import type { ReactNode } from 'react'
-import { Outlet } from 'react-router-dom'
-import { Toaster } from '@/components/ui/sonner'
+import type { ReactNode } from "react";
+import { Outlet } from "react-router-dom";
+import { Toaster } from "@/components/ui/sonner";
+import { Header } from "@/components/shared/header";
+import { Footer } from "@/components/shared/footer";
 
-/**
- * Root layout — matches all routes.
- *
- * Responsibilities:
- * - Global chrome (header, nav, footer) when needed
- * - Mount global UI (Sonner Toaster)
- * - Nested routes render via <Outlet />
- */
 export function RootLayout(): ReactNode {
   return (
-    <div className="flex min-h-svh flex-col">
+    <div className="flex min-h-svh flex-col bg-white">
+      <Header />
+
       <main className="flex-1">
         <Outlet />
       </main>
-      {/* Global toast notifications (Sonner). */}
-      <Toaster position="top-right" richColors />
+
+      <div className="relative">
+  <Footer />
+</div>
+
+      <Toaster
+        position="top-right"
+        richColors
+      />
     </div>
-  )
+  );
 }

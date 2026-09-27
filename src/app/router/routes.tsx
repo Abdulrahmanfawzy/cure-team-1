@@ -18,9 +18,12 @@ import ForgetPassword from "@/features/auth/pages/ForgetPassword";
 import ProfileLayout from "@/features/profile/pages/ProfileLayout";
 import PasswordManagement from "@/features/profile/pages/PasswordManagement";
 import PersonalInformation from "@/features/profile/pages/PersonalInformation";
-// import ForgetPassowrd from "@/features/auth/pages/ForgetPassowrd"; and this
+// import ForgetPassowrd from "@/features/auth/pages/ForgetPassowrd";
 import DoctorsPage from "@/features/doctors/pages/DoctorsPage";
 import DoctorDetailsPage from "@/features/doctorDetails/pages/DoctorDetailsPage";
+import AppointmentPage from "@/features/appointment/pages/AppointmentPage";
+import BookPage from "@/features/book/pages/BookPage";
+import ContactPage from "@/features/contact/pages/contact-page";
 
 /**
  * Route tree.
@@ -51,11 +54,14 @@ const routes: RouteObject[] = [
       { path: PATHS.doctors, element: <DoctorsPage /> },
       {path: PATHS.doctorDetails, element: <DoctorDetailsPage/>},
 
-      // ——— Protected routes ———
       {
         element: <ProtectedRoute />,
         children: [
           { path: PATHS.dashboard, element: <DashboardPage /> },
+          {
+            path: PATHS.contact,
+            element: <ContactPage />,
+          },
           // Profile
           {
             path: PATHS.profile,
@@ -74,6 +80,14 @@ const routes: RouteObject[] = [
                 element: <PersonalInformation />,
               },
             ],
+          },
+
+          // book appointment
+          { path: PATHS.appointment, element: <AppointmentPage /> },
+          // book
+          {
+            path: PATHS.book,
+            element: <BookPage />,
           },
         ],
       },
