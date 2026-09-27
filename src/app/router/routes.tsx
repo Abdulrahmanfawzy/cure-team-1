@@ -52,16 +52,12 @@ const routes: RouteObject[] = [
       { path: PATHS.forgotPassword, element: <ForgetPassword /> },
       { path: PATHS.resetPassword, element: <ResetPassword /> },
       { path: PATHS.doctors, element: <DoctorsPage /> },
-      {path: PATHS.doctorDetails, element: <DoctorDetailsPage/>},
+      { path: PATHS.doctorDetails, element: <DoctorDetailsPage /> },
 
       {
         element: <ProtectedRoute />,
         children: [
           { path: PATHS.dashboard, element: <DashboardPage /> },
-          {
-            path: PATHS.contact,
-            element: <ContactPage />,
-          },
           // Profile
           {
             path: PATHS.profile,
@@ -90,6 +86,11 @@ const routes: RouteObject[] = [
             element: <BookPage />,
           },
         ],
+      },
+
+      {
+        path: PATHS.contact,
+        element: <ContactPage />,
       },
 
       // ——— Catch-all ———

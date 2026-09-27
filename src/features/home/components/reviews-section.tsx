@@ -1,5 +1,5 @@
+import { StarRating } from "@/components/shared/star-rating";
 import { reviews } from "../constants/home-data";
-import { StarRating } from "@/components/shared";
 export function ReviewsSection() {
   return (
     <section className="pb-20 md:pb-24">
@@ -34,7 +34,7 @@ export function ReviewsSection() {
             ))}
           </div>
 
-          
+
         </div>
       </div>
     </section>
