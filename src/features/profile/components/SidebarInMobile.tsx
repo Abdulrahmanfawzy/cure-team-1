@@ -2,8 +2,22 @@ import { Menu } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import UserInformation from "./sidebar/UserInformation";
 import Links from "./sidebar/Links";
+import type { ProfileResponse } from "../types/profile-type";
+import type { ChangeEvent } from "react";
+type Props = {
+  profile?: ProfileResponse;
+  imagePreview: string | null;
+  onImageChange: (e: ChangeEvent<HTMLInputElement>) => void;
 
-function SidebarInMobile() {
+  isPending: boolean;
+};
+function SidebarInMobile({
+  profile,
+  imagePreview,
+  onImageChange,
+
+  isPending,
+}: Props) {
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -22,7 +36,12 @@ function SidebarInMobile() {
       >
         <div className="flex justify-center gap-12 flex-col">
           {/* User Info */}
-          <UserInformation />
+          <UserInformation
+            imagePreview={imagePreview}
+            onImageChange={onImageChange}
+            profile={profile}
+            isPending={isPending}
+          />
 
           {/* Links */}
           <Links />

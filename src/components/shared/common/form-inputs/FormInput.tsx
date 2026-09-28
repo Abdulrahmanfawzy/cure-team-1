@@ -40,6 +40,7 @@ export function FormInput<Type extends FieldValues>({
                   id={name}
                   type={type}
                   placeholder={placeholder}
+                  autoComplete="on"
                   {...props}
                 />
               </InputGroup>
