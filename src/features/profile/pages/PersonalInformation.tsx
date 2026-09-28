@@ -1,6 +1,7 @@
 import PersonalInformationForm from "../components/PersonalInformationForm";
 
 function PersonalInformation() {
+
   return (
     <>
       <div>

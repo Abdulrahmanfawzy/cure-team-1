@@ -6,8 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { registerSchema } from "../../schemas/auth-schemas";
 import type { registerPayload } from "../../types/auth-types";
 import { FormInput } from "@/components/shared/common/form-inputs/FormInput";
-import { FieldSeparator } from "@/components/ui/field";
-
+ 
 function RegisterForm(): ReactNode {
   const { control, handleSubmit } = useForm<registerPayload>({
     defaultValues: {

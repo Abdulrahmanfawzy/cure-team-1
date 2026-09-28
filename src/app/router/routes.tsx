@@ -12,7 +12,7 @@ import { LoginPage } from "./pages/login-page";
 import { NotFoundPage } from "./pages/not-found-page";
 import { RegisterPage } from "./pages/register-page";
 import ProfileLayout from "@/features/profile/pages/ProfileLayout";
-import PasswordManagement from "@/features/profile/pages/PasswordManagement";
+// import PasswordManagement from "@/features/profile/pages/PasswordManagement";
 import PersonalInformation from "@/features/profile/pages/PersonalInformation";
 import DoctorsPage from "@/features/doctors/pages/DoctorsPage";
 import DoctorDetailsPage from "@/features/doctorDetails/pages/DoctorDetailsPage";
@@ -33,7 +33,6 @@ const routes: RouteObject[] = [
         children: [
           // ——— Public routes ———
           { path: PATHS.home, element: <HomePage /> },
-
           { path: PATHS.doctors, element: <DoctorsPage /> },
           { path: PATHS.doctorDetails, element: <DoctorDetailsPage /> },
 
@@ -53,10 +52,10 @@ const routes: RouteObject[] = [
                       <Navigate to={PATHS.personalInformation} replace />
                     ),
                   },
-                  {
-                    path: PATHS.passwordManagement,
-                    element: <PasswordManagement />,
-                  },
+                  // {
+                  //   path: PATHS.passwordManagement,
+                  //   element: <PasswordManagement />,
+                  // },
                   {
                     path: PATHS.personalInformation,
                     element: <PersonalInformation />,

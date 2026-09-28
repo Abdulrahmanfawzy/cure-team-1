@@ -1,6 +1,10 @@
 import { PATHS } from "@/app/router";
 import { cn } from "cn";
-import { LockKeyhole, LogOutIcon, User } from "lucide-react";
+import {
+  // LockKeyhole,
+  LogOutIcon,
+  User,
+} from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 
 function Links() {
@@ -25,7 +29,7 @@ function Links() {
         </div>
       </Link>
 
-      <Link to={PATHS.passwordManagement}>
+      {/* <Link to={PATHS.passwordManagement}>
         <div
           className={cn(
             "flex items-center text-app-secondary gap-2  pr-4 pl-3 h-12 rounded-md",
@@ -37,7 +41,7 @@ function Links() {
             <p className="text-app-secondary">Password management</p>
           </div>
         </div>
-      </Link>
+      </Link> */}
 
       <button className="flex cursor-pointer items-center gap-2 text-app-error  pr-4 pl-3 h-12 rounded-md text-base">
         <LogOutIcon size={24} />
