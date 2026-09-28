@@ -1,13 +1,6 @@
 import { PATHS } from "@/app/router";
-import type {
-  ReactNode,
-} from "react";
-import {
-  HeartPulse,
-  Mail,
-  MapPin,
-  Phone,
-} from "lucide-react";
+import type { ReactNode } from "react";
+import { HeartPulse, Mail, MapPin, Phone } from "lucide-react";
 import { Link } from "react-router-dom";
 import facebookIcon from "@/assets/facebook.png";
 import whatsappIcon from "@/assets/whatsapp.png";
@@ -51,7 +44,7 @@ const socialLinks = [
 export function Footer() {
   return (
     <footer className="bg-app-secondary text-white mt-10">
-      <div className="main_contaoner ">
+      <div className="main_container ">
         {/* Footer content */}
         <div className="grid gap-10 py-10 md:grid-cols-2 lg:grid-cols-4">
           {/* Brand */}
@@ -63,26 +56,24 @@ export function Footer() {
             >
               <HeartPulse size={35} strokeWidth={1.8} />
 
-              <span className="font-noto-serif-georgian text-2xl">
-                Cure
-              </span>
+              <span className="font-noto-serif-georgian text-2xl">Cure</span>
             </Link>
 
             <p className=" leading-5 text-white">
-              Cure helps you find trusted doctors, book appointments, and
-              manage your health quickly and easily.
+              Cure helps you find trusted doctors, book appointments, and manage
+              your health quickly and easily.
             </p>
 
             {/* Social links */}
-           <div className="mt-5 flex items-center gap-2">
-  {socialLinks.map((social) => (
-    <a
-      key={social.label}
-      href={social.href}
-      aria-label={social.label}
-      target="_blank"
-      rel="noreferrer"
-      className="
+            <div className="mt-5 flex items-center gap-2">
+              {socialLinks.map((social) => (
+                <a
+                  key={social.label}
+                  href={social.href}
+                  aria-label={social.label}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="
         flex size-8.5
         items-center justify-center
         rounded-sm
@@ -90,28 +81,18 @@ export function Footer() {
         transition-transform
         hover:scale-105
       "
-    >
-      <img
-        src={social.image}
-        alt=""
-        aria-hidden="true"
-      />
-    </a>
-  ))}
-</div>
+                >
+                  <img src={social.image} alt="" aria-hidden="true" />
+                </a>
+              ))}
+            </div>
           </div>
 
           {/* Company */}
-          <FooterColumn
-            title="Company"
-            links={companyLinks}
-          />
+          <FooterColumn title="Company" links={companyLinks} />
 
           {/* Support */}
-          <FooterColumn
-            title="Support"
-            links={supportLinks}
-          />
+          <FooterColumn title="Support" links={supportLinks} />
 
           {/* Contact */}
           <div>
@@ -158,15 +139,10 @@ interface FooterColumnProps {
   }[];
 }
 
-function FooterColumn({
-  title,
-  links,
-}: FooterColumnProps) {
+function FooterColumn({ title, links }: FooterColumnProps) {
   return (
     <div>
-      <h3 className="mb-4 font-noto-serif-georgian text-sm">
-        {title}
-      </h3>
+      <h3 className="mb-4 font-noto-serif-georgian text-sm">{title}</h3>
 
       <nav className="flex flex-col gap-3">
         {links.map((link) => (
@@ -192,18 +168,12 @@ interface ContactItemProps {
   children: ReactNode;
 }
 
-function ContactItem({
-  icon,
-  children,
-}: ContactItemProps) {
+function ContactItem({ icon, children }: ContactItemProps) {
   return (
     <div className="flex items-start gap-2">
-      <span className="mt-0.5 shrink-0">
-        {icon}
-      </span>
+      <span className="mt-0.5 shrink-0">{icon}</span>
 
       <span>{children}</span>
     </div>
   );
 }
-

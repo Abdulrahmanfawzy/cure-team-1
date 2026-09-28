@@ -4,9 +4,9 @@ import { faqItems } from "../constants/home-data";
 export function FAQSection() {
   return (
     <section className="pb-12 md:pb-20">
-      <div className="main_contaoner">
+      <div className="main_container">
         <div className="mx-auto max-w-120 text-center">
-            <span
+          <span
             className="
                inline-flex rounded-full
               bg-app-primary-lightest

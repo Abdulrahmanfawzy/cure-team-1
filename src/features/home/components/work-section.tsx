@@ -3,7 +3,7 @@ import { howItWorksSteps } from "../constants/home-data";
 export function HowItWorksSection() {
   return (
     <section className="overflow-hidden py-14 md:py-24">
-      <div className="main_contaoner">
+      <div className="main_container">
         <h2
           className="
             mb-8 text-center
@@ -116,11 +116,7 @@ export function HowItWorksSection() {
               className={`
                 h-1.5 rounded-full
                 transition-all
-                ${
-                  index === 0
-                    ? "w-5 bg-app-primary"
-                    : "w-1.5 bg-app-neutral"
-                }
+                ${index === 0 ? "w-5 bg-app-primary" : "w-1.5 bg-app-neutral"}
               `}
             />
           ))}
