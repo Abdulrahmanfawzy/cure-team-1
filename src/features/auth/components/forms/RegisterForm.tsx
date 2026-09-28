@@ -6,9 +6,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { registerSchema } from "../../schemas/auth-schemas";
 import type { registerPayload } from "../../types/auth-types";
 import { FormInput } from "@/components/shared/common/form-inputs/FormInput";
- 
+import { useAuth } from "../../hooks/auth-hooks";
+import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
+import { PATHS } from "@/app/router";
+
 function RegisterForm(): ReactNode {
-  const { control, handleSubmit } = useForm<registerPayload>({
+  const navigate = useNavigate();
+  const { control, handleSubmit, reset } = useForm<registerPayload>({
     defaultValues: {
       name: "",
       email: "",
@@ -17,9 +22,22 @@ function RegisterForm(): ReactNode {
     resolver: zodResolver(registerSchema),
   });
 
+  const { register } = useAuth();
+
   const submitRegisterForm = (formData: registerPayload) => {
-    console.log(formData);
+    register.mutate(formData, {
+      onSuccess: (data) => {
+        toast.success(data.message);
+        navigate(`${PATHS.verifyOTP}?type=register&phone=${formData.phone}`);
+        reset();
+      },
+      onError: (error) => {
+        console.log(error.response);
+        toast.error(error.response?.data?.message);
+      },
+    });
   };
+
   return (
     <form onSubmit={handleSubmit(submitRegisterForm)} className="space-y-4">
       {/* Name */}
@@ -49,8 +67,8 @@ function RegisterForm(): ReactNode {
         placeholder="Enter your number"
       />
 
-      <Button type="submit" className="w-full">
-        Sign Up
+      <Button disabled={register.isPending} type="submit" className="w-full">
+        {register.isPending ? "Loading..." : "Sign Up"}
       </Button>
 
       <FormFooter mode="Sign up" />

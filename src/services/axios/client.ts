@@ -1,4 +1,5 @@
 import axios from "axios";
+import { config } from "zod";
 
 /**
  * Centralized Axios instance.
@@ -13,10 +14,13 @@ import axios from "axios";
  */
 export const apiClient = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
-  headers: {
-    // "Content-Type": "application/json",
-    Authorization:
-      "bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL3JvdW5kLTEzLWN1cmUuaHVtYS12b2x2ZS5jb20vYXBpL2F1dGgvbG9naW4vdmVyaWZ5IiwiaWF0IjoxNzkwNjAzMDU2LCJleHAiOjQ3OTA2MDMwNTYsIm5iZiI6MTc5MDYwMzA1NiwianRpIjoiT3J3blRQOGdldDh2S0w5UCIsInN1YiI6IjAxYTBlODQyLTJiMzItNzA2Ny04ODAxLWNmNGQ4OWI0NjBmMyIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.-s4IFZ94TEEqEhGyirbOlm2TRzLPdHxRxBzcKI1h5Bk",
-  },
   timeout: 15_000,
+});
+
+apiClient.interceptors.request.use((config) => {
+  const token = localStorage.getItem("auth_token");
+  if (token) {
+    config.headers.Authorization = `bearer ${token}`;
+  }
+  return config;
 });

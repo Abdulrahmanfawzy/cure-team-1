@@ -5,7 +5,7 @@ export interface AuthStateType {
 }
 
 const initialState: AuthStateType = {
-  isAuthenticated: false,
+  isAuthenticated: !!localStorage.getItem("auth_token"),
 };
 
 const authSlice = createSlice({

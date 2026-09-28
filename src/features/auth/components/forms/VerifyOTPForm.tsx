@@ -6,28 +6,80 @@ import {
   InputOTPSlot,
 } from "@/components/ui/input-otp";
 import { useEffect, useState, type ReactNode } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { FieldError } from "@/components/ui/field";
 import type { verifyOtpPayload } from "../../types/auth-types";
 import { verifyOtpSchema } from "../../schemas/auth-schemas";
+import { useAuth } from "../../hooks/auth-hooks";
+import { toast } from "sonner";
+import { useAppDispatch } from "@/app/store/hooks";
+import { setAuthenticated } from "../../slices/auth-slice";
+
+// Code Otp
+const otp_code = "1234";
 
 function VerifyOTPForm(): ReactNode {
+  const [searchParams] = useSearchParams();
   const [otpTimeInvalid, setOtpTimeInvalid] = useState(60);
 
-  const { control, handleSubmit } = useForm<verifyOtpPayload>({
+  const navigate = useNavigate();
+
+  const appDispatch = useAppDispatch();
+
+  // React Hook form
+  const { control, handleSubmit, setError, reset } = useForm<verifyOtpPayload>({
     defaultValues: {
       code: "",
-      phone: "",
-      type: "",
+      phone: searchParams.get("phone") ?? "",
+      type: searchParams.get("type") ?? "",
     },
     resolver: zodResolver(verifyOtpSchema),
   });
 
+  const { verify_register, verify_login } = useAuth();
+
   const submitVerifyOtpForm = (formData: verifyOtpPayload) => {
-    console.log(formData);
+    if (formData.code === otp_code) {
+      // Verify Register
+      if (formData.type === "register") {
+        verify_register.mutate(formData, {
+          onSuccess: (data) => {
+            toast.success(data.message);
+            navigate(PATHS.login);
+            reset();
+          },
+          onError: (error) => {
+            console.log(error.response);
+            toast.error(error.response?.data?.message);
+          },
+        });
+      }
+
+      // Verify Login
+      if (formData.type === "login") {
+        verify_login.mutate(formData, {
+          onSuccess: (data) => {
+            toast.success(data.message);
+            // add token to local storage
+            localStorage.setItem("auth_token", data.data.access_token);
+            appDispatch(setAuthenticated(true));
+            navigate(PATHS.home);
+            reset();
+          },
+          onError: (error) => {
+            console.log(error.response);
+            toast.error(error.response?.data?.message);
+          },
+        });
+      }
+    } else {
+      setError("code", {
+        message: "Code is not Correct",
+      });
+    }
   };
 
   useEffect(() => {
@@ -84,7 +136,13 @@ function VerifyOTPForm(): ReactNode {
             Resend
           </Button>
           <span className="text-sm text-app-neutral">OR</span>
-          <Link to={PATHS.register}>
+          <Link
+            to={
+              searchParams.get("type") === "login"
+                ? PATHS.login
+                : PATHS.register
+            }
+          >
             <Button
               type="button"
               variant={"link"}
@@ -104,8 +162,14 @@ function VerifyOTPForm(): ReactNode {
         </div>
       )}
 
-      <Button type="submit" className="w-full">
-        Verify
+      <Button
+        disabled={verify_register.isPending || verify_login.isPending}
+        type="submit"
+        className="w-full"
+      >
+        {verify_register.isPending || verify_login.isPending
+          ? "Loading..."
+          : "Verify"}
       </Button>
     </form>
   );

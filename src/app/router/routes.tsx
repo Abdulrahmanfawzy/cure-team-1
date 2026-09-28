@@ -21,27 +21,98 @@ import BookPage from "@/features/book/pages/BookPage";
 import ContactPage from "@/features/contact/pages/contact-page";
 import VerifyPage from "./pages/verify-page";
 import MainLayout from "./layouts/main-layout";
-import AuthLayout from "./layouts/auth-layout";
+import AuthGuard from "./layouts/auth-guard";
 
+// const routes: RouteObject[] = [
+//   {
+//     element: <RootLayout />,
+//     children: [
+//       // main Content Layout
+//       {
+//         element: <MainLayout />,
+//         children: [
+//           // ——— Public routes ———
+//           { path: PATHS.home, element: <HomePage /> },
+//           { path: PATHS.doctors, element: <DoctorsPage /> },
+//           { path: PATHS.doctorDetails, element: <DoctorDetailsPage /> },
+
+//           // ——— Protected routes ———
+//           {
+//             element: <ProtectedRoute />,
+//             children: [
+//               { path: PATHS.dashboard, element: <DashboardPage /> },
+//               // Profile
+//               {
+//                 path: PATHS.profile,
+//                 element: <ProfileLayout />,
+//                 children: [
+//                   {
+//                     index: true,
+//                     element: (
+//                       <Navigate to={PATHS.personalInformation} replace />
+//                     ),
+//                   },
+//                   // {
+//                   //   path: PATHS.passwordManagement,
+//                   //   element: <PasswordManagement />,
+//                   // },
+//                   {
+//                     path: PATHS.personalInformation,
+//                     element: <PersonalInformation />,
+//                   },
+//                 ],
+//               },
+
+//               // book appointment
+//               { path: PATHS.appointment, element: <AppointmentPage /> },
+//               // book
+//               {
+//                 path: PATHS.book,
+//                 element: <BookPage />,
+//               },
+//             ],
+//           },
+
+//           {
+//             path: PATHS.contact,
+//             element: <ContactPage />,
+//           },
+
+//           // ——— Catch-all ———
+//           { path: "*", element: <NotFoundPage /> },
+//         ],
+//       },
+
+//       // Auth Layout
+//       {
+//         element: <AuthLayout />,
+//         children: [
+//           { path: PATHS.login, element: <LoginPage /> },
+//           { path: PATHS.verifyOTP, element: <VerifyPage /> },
+//           { path: PATHS.register, element: <RegisterPage /> },
+//         ],
+//       },
+//     ],
+//   },
+// ];
 const routes: RouteObject[] = [
   {
     element: <RootLayout />,
     children: [
-      // main Content Layout
       {
         element: <MainLayout />,
         children: [
-          // ——— Public routes ———
+          // Public routes
           { path: PATHS.home, element: <HomePage /> },
           { path: PATHS.doctors, element: <DoctorsPage /> },
           { path: PATHS.doctorDetails, element: <DoctorDetailsPage /> },
 
-          // ——— Protected routes ———
+          // Protected routes
           {
             element: <ProtectedRoute />,
             children: [
               { path: PATHS.dashboard, element: <DashboardPage /> },
-              // Profile
+
               {
                 path: PATHS.profile,
                 element: <ProfileLayout />,
@@ -52,10 +123,6 @@ const routes: RouteObject[] = [
                       <Navigate to={PATHS.personalInformation} replace />
                     ),
                   },
-                  // {
-                  //   path: PATHS.passwordManagement,
-                  //   element: <PasswordManagement />,
-                  // },
                   {
                     path: PATHS.personalInformation,
                     element: <PersonalInformation />,
@@ -63,9 +130,11 @@ const routes: RouteObject[] = [
                 ],
               },
 
-              // book appointment
-              { path: PATHS.appointment, element: <AppointmentPage /> },
-              // book
+              {
+                path: PATHS.appointment,
+                element: <AppointmentPage />,
+              },
+
               {
                 path: PATHS.book,
                 element: <BookPage />,
@@ -78,23 +147,21 @@ const routes: RouteObject[] = [
             element: <ContactPage />,
           },
 
-          // ——— Catch-all ———
           { path: "*", element: <NotFoundPage /> },
         ],
       },
 
-      // Auth Layout
+      //  Auth routes
       {
-        element: <AuthLayout />,
+        element: <AuthGuard />,
         children: [
           { path: PATHS.login, element: <LoginPage /> },
-          { path: PATHS.verifyOTP, element: <VerifyPage /> },
           { path: PATHS.register, element: <RegisterPage /> },
+          { path: PATHS.verifyOTP, element: <VerifyPage /> },
         ],
       },
     ],
   },
 ];
-
 /** App router instance consumed by <RouterProvider /> in App.tsx. */
 export const router = createBrowserRouter(routes);
