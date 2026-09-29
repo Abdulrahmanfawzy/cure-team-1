@@ -20,3 +20,8 @@ export const verifyOtpSchema = z.object({
   type: z.string(),
   phone: z.string(),
 });
+
+export const googleRegisterSchema = z.object({
+  temp_token: z.string(),
+  phone: z.string().trim().min(11, "Phone number must be at least 11 digits"),
+});

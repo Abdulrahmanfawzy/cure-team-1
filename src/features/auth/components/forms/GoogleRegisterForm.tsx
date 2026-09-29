@@ -2,31 +2,38 @@ import { Button } from "@/components/ui/button";
 import { type ReactNode } from "react";
 import { useForm } from "react-hook-form";
 import FormFooter from "../FormFooter";
-import type { loginPayload } from "../../types/auth-types";
+import type { googleRegisterPayload } from "../../types/auth-types";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { loginSchema } from "../../schemas/auth-schemas";
+import { googleRegisterSchema } from "../../schemas/auth-schemas";
 import { FormInput } from "@/components/shared/common/form-inputs/FormInput";
-import { useAuth } from "../../hooks/auth-hooks";
+import { useGoogleAuth } from "../../hooks/auth-hooks";
 import { PATHS } from "@/app/router";
 import { toast } from "sonner";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
-function LoginForm(): ReactNode {
+function GoogleRegisterForm(): ReactNode {
   const navigate = useNavigate();
-  const { control, handleSubmit, reset } = useForm<loginPayload>({
+  const [searchParams] = useSearchParams();
+
+  const { control, handleSubmit, reset } = useForm<googleRegisterPayload>({
     defaultValues: {
       phone: "",
+      temp_token: searchParams.get("temp_token") ?? "",
     },
-    resolver: zodResolver(loginSchema),
+    resolver: zodResolver(googleRegisterSchema),
   });
 
-  const { login } = useAuth();
+  const { google_register } = useGoogleAuth();
 
-  const submitLoginForm = (formData: loginPayload) => {
-    login.mutate(formData, {
+  const submitLoginForm = (formData: googleRegisterPayload) => {
+    console.log(formData);
+
+    google_register.mutate(formData, {
       onSuccess: (data) => {
         toast.success(data.message);
-        navigate(`${PATHS.verifyOTP}?type=login&phone=${formData.phone}`);
+        navigate(
+          `${PATHS.verifyOTP}?type=google-register&phone=${formData.phone}`,
+        );
         reset();
       },
       onError: (error) => {
@@ -47,8 +54,12 @@ function LoginForm(): ReactNode {
         placeholder="Enter your number"
       />
 
-      <Button disabled={login.isPending} type="submit" className="w-full">
-        {login.isPending ? "Loading..." : "Sign In"}
+      <Button
+        disabled={google_register.isPending}
+        type="submit"
+        className="w-full"
+      >
+        {google_register.isPending ? "Loading..." : "Verify Account"}
       </Button>
 
       <FormFooter mode="Sign in" />
@@ -56,4 +67,4 @@ function LoginForm(): ReactNode {
   );
 }
 
-export default LoginForm;
+export default GoogleRegisterForm;

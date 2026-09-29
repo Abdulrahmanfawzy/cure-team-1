@@ -55,7 +55,6 @@ const PersonalInformationForm = () => {
   const onSubmit = (payload: PersonalInformationPayload) => {
     mutate(payload, {
       onSuccess: (data) => {
-        console.log(data);
         toast.success(data.message ?? "Profile Updated Successfully");
         setEditMode(!editMode);
       },

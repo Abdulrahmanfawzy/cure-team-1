@@ -24,7 +24,6 @@ function ProfileLayout() {
       };
       mutate(profile_image, {
         onSuccess: (data) => {
-          console.log(data);
           toast.success(data.message);
         },
         onError: (error) => {

@@ -3,7 +3,7 @@ import { reviews } from "../constants/home-data";
 export function ReviewsSection() {
   return (
     <section className="pb-20 md:pb-24">
-      <div className="main_contaoner">
+      <div className="main_container">
         <div className="mx-auto max-w-125 text-center">
           <h2 className="font-serif text-2xl leading-tight text-app-secondary md:text-3xl">
             Reviews
@@ -33,8 +33,6 @@ export function ReviewsSection() {
               />
             ))}
           </div>
-
-
         </div>
       </div>
     </section>

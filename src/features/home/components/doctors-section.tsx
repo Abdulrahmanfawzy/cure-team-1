@@ -5,7 +5,7 @@ import { doctors } from "../constants/home-data";
 export function DoctorsSection() {
   return (
     <section className="pb-20 md:pb-24">
-      <div className="main_contaoner">
+      <div className="main_container">
         <div className="mb-6 flex items-end justify-between gap-4">
           <div>
             <h2 className="font-serif text-2xl text-app-secondary md:text-3xl">
@@ -55,11 +55,7 @@ export function DoctorsSection() {
   );
 }
 
-function DoctorCard({
-  doctor,
-}: {
-  doctor: (typeof doctors)[number];
-}) {
+function DoctorCard({ doctor }: { doctor: (typeof doctors)[number] }) {
   return (
     <article
       className="
@@ -87,16 +83,10 @@ function DoctorCard({
           </p>
 
           <div className="mt-1 flex items-center gap-1 text-[8px]">
-            <Star
-              size={10}
-              className="fill-app-gold text-app-gold"
-            />
+            <Star size={10} className="fill-app-gold text-app-gold" />
             <span>{doctor.rating}</span>
 
-            <Clock3
-              size={9}
-              className="ml-1 text-app-neutral"
-            />
+            <Clock3 size={9} className="ml-1 text-app-neutral" />
 
             <span>{doctor.availability}</span>
           </div>
@@ -104,9 +94,7 @@ function DoctorCard({
       </div>
 
       <div className="mt-3 flex items-center justify-between">
-        <span className="text-[10px] text-app-neutral-darker">
-          Price/hour
-        </span>
+        <span className="text-[10px] text-app-neutral-darker">Price/hour</span>
 
         <span className="text-[10px] font-medium text-app-error">
           {doctor.price}
