@@ -67,8 +67,13 @@ function RegisterForm(): ReactNode {
         placeholder="Enter your number"
       />
 
-      <Button disabled={register.isPending} type="submit" className="w-full">
-        {register.isPending ? "Loading..." : "Sign Up"}
+      <Button
+        isLoading={register.isPending}
+        disabled={register.isPending}
+        type="submit"
+        className="w-full"
+      >
+        Sign Up
       </Button>
 
       <FormFooter />

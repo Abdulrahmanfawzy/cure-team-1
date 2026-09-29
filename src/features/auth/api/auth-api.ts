@@ -6,11 +6,19 @@ import type {
   loginPayload,
   logoutPayload,
   registerPayload,
+  resendOtpPayload,
+  resendOtpResponse,
   VerifyLoginResponse,
   verifyOtpPayload,
 } from "../types/auth-types";
 import type { ApiResponse } from "@/types/api";
 
+export const resendOtp = async (
+  payload: resendOtpPayload,
+): Promise<ApiResponse<resendOtpResponse>> => {
+  const { data } = await apiClient.post("auth/resend", payload);
+  return data
+};
 export const logoutRequest = async (
   payload: logoutPayload,
 ): Promise<ApiResponse<[]>> => {

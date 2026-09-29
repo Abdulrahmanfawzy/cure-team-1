@@ -43,7 +43,7 @@ function ProfileLayout() {
   if (isLoading) {
     return (
       <div className="main_container my-16">
-        <ProfileSkeleton />;
+        <ProfileSkeleton />
       </div>
     );
   }

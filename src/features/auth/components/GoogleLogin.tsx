@@ -75,11 +75,12 @@ function GoogleLogin({ mode }: GoogleLoginProps) {
     };
 
     loginWithGoogle.mutate(payload, {
-      onSuccess: handleGoogleSuccess,
+      onSuccess: (data) => {
+        handleGoogleSuccess(data);
+      },
 
       onError: (error) => {
         console.error("Google login error:", error.response);
-
         toast.error(error.response?.data?.message ?? "Something went wrong.");
       },
     });
@@ -87,7 +88,10 @@ function GoogleLogin({ mode }: GoogleLoginProps) {
 
   //useGoogleLogin From react-oauth
   const login = useGoogleLogin({
-    onSuccess: handleGoogleLogin,
+    onSuccess: (tokenResponse) => {
+      console.log("google res", tokenResponse);
+      handleGoogleLogin(tokenResponse);
+    },
 
     onError: (error) => {
       console.error("Google OAuth error:", error);
@@ -103,12 +107,12 @@ function GoogleLogin({ mode }: GoogleLoginProps) {
       variant="secondary"
       size="lg"
       disabled={isLoading}
+      isLoading={isLoading}
       onClick={() => login()}
       className="flex w-full items-center justify-center gap-1 bg-transparent!"
     >
       <GoogleIcon />
-
-      <span>{isLoading ? "Signing in..." : `${mode} with Google`}</span>
+      <span> {`${mode} with Google`}</span>
     </Button>
   );
 }

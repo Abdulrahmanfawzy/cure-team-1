@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { type ReactNode } from "react";
 import { useForm } from "react-hook-form";
-import FormFooter from "../FormFooter";
 import type { googleRegisterPayload } from "../../types/auth-types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { googleRegisterSchema } from "../../schemas/auth-schemas";
@@ -26,7 +25,7 @@ function GoogleRegisterForm(): ReactNode {
   const { google_register } = useGoogleAuth();
 
   const submitLoginForm = (formData: googleRegisterPayload) => {
-    console.log(formData);
+    console.log("payload", formData);
 
     google_register.mutate(formData, {
       onSuccess: (data) => {
@@ -57,12 +56,11 @@ function GoogleRegisterForm(): ReactNode {
       <Button
         disabled={google_register.isPending}
         type="submit"
+        isLoading={google_register.isPending}
         className="w-full"
       >
-        {google_register.isPending ? "Loading..." : "Verify Account"}
+        Verify Account
       </Button>
-
-      <FormFooter mode="Sign in" />
     </form>
   );
 }
