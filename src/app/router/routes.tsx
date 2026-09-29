@@ -23,7 +23,7 @@ import VerifyPage from "./pages/verify-page";
 import MainLayout from "./layouts/main-layout";
 import AuthGuard from "./layouts/auth-guard";
 import GoogleCompleteRegister from "@/features/auth/pages/GoogleCompleteRegister";
-import AuthLayout from "./layouts/auth-layout";
+import AuthLayout from "./layouts/auth-guard";
 import ChatPage from "@/features/chat/pages/ChatPage";
 
 // const routes: RouteObject[] = [
