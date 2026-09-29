@@ -22,6 +22,7 @@ import ContactPage from "@/features/contact/pages/contact-page";
 import VerifyPage from "./pages/verify-page";
 import MainLayout from "./layouts/main-layout";
 import AuthLayout from "./layouts/auth-layout";
+import ChatPage from "@/features/chat/pages/ChatPage";
 
 const routes: RouteObject[] = [
   {
@@ -70,6 +71,10 @@ const routes: RouteObject[] = [
               {
                 path: PATHS.book,
                 element: <BookPage />,
+              },
+              {
+                path: PATHS.chat,
+                element: <ChatPage />,
               },
             ],
           },
