@@ -1,9 +1,5 @@
 import { useMemo, useState } from "react";
-import {
-  CalendarDays,
-  ChevronDown,
-  ChevronUp,
-} from "lucide-react";
+import { CalendarDays, ChevronDown, ChevronUp } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -18,26 +14,21 @@ import { useParams } from "react-router-dom";
 import ReviewModal from "../components/ReviewModal";
 
 /* =========================================================
-   TYPES
-========================================================= */
-interface SelectedDay {
-  id: string;
-  date: string;
-}
-
-/* =========================================================
    PAGE
 ========================================================= */
 
 export default function AppointmentPage() {
   const { id } = useParams();
-  // test
+
   const { data: doctor, isLoading } = useSpecificDoctor(
     "01a0e8ff-60eb-708c-bec3-b7fe3a1eb596",
     // id
   );
- 
-  const [selectedDay, setSelectedDay] = useState<SelectedDay | null>(null);
+
+  console.log(doctor);
+  
+
+  const [selectedDay, setSelectedDay] = useState<string | null>(null);
   const [selectedTime, setSelectedTime] = useState<string>("");
 
   /* =========================================================
@@ -47,18 +38,10 @@ export default function AppointmentPage() {
   const availableDays = useMemo(() => {
     if (!doctor?.available_slots) return [];
 
-    const uniqueDays = new Map<string, SelectedDay>();
-
-    doctor.available_slots.forEach((slot) => {
-      if (!uniqueDays.has(slot.date)) {
-        uniqueDays.set(slot.date, {
-          id: slot.id,
-          date: slot.date,
-        });
-      }
-    });
-
-    return Array.from(uniqueDays.values());
+    return doctor.available_slots.filter(
+      (slot, index, slots) =>
+        slots.findIndex((item) => item.date === slot.date) === index,
+    );
   }, [doctor?.available_slots]);
 
   /* =========================================================
@@ -68,17 +51,15 @@ export default function AppointmentPage() {
   const selectedDaySlots = useMemo(() => {
     if (!doctor?.available_slots || !selectedDay) return [];
 
-    return doctor.available_slots.filter(
-      (slot) => slot.date === selectedDay.date,
-    );
+    return doctor.available_slots.filter((slot) => slot.date === selectedDay);
   }, [doctor?.available_slots, selectedDay]);
 
   /* =========================================================
      HANDLERS
   ========================================================= */
 
-  const handleSelectDay = (day: SelectedDay) => {
-    setSelectedDay(day);
+  const handleSelectDay = (date: string) => {
+    setSelectedDay(date);
 
     // Reset selected time when changing the day
     setSelectedTime("");
@@ -96,7 +77,10 @@ export default function AppointmentPage() {
     (slot) => slot.id === selectedTime,
   );
 
-  // loading
+  /* =========================================================
+     LOADING
+  ========================================================= */
+
   if (isLoading) {
     return <PageLoader />;
   }
@@ -106,6 +90,7 @@ export default function AppointmentPage() {
       {/* =================================================
           PAGE HEADER
       ================================================= */}
+
       <AppointmentHeader />
 
       {/* =================================================
@@ -147,16 +132,16 @@ export default function AppointmentPage() {
             ============================================= */}
 
             <div className="mt-7 grid grid-cols-4 gap-4 sm:grid-cols-6">
-              {availableDays.map((day) => {
-                const active = selectedDay?.date === day.date;
+              {availableDays.map((slot) => {
+                const active = selectedDay === slot.date;
 
-                const [, month, date] = day.date.split("-");
+                const [, month, date] = slot.date.split("-");
 
                 return (
                   <Button
-                    key={day.date}
+                    key={slot.date}
                     type="button"
-                    onClick={() => handleSelectDay(day)}
+                    onClick={() => handleSelectDay(slot.date)}
                     size="lg"
                     className={`
                       flex
@@ -227,7 +212,7 @@ export default function AppointmentPage() {
                 />
 
                 <span>
-                  {selectedDay?.date ?? ""} - {selectedSlot?.start_time ?? ""}
+                  {selectedDay ?? ""} - {selectedSlot?.start_time ?? ""}
                 </span>
               </div>
 
@@ -250,6 +235,7 @@ export default function AppointmentPage() {
           {/* ===============================================
               REVIEWS HEADER
           =============================================== */}
+
           <div className="mt-8">
             <div className="flex items-baseline justify-between">
               <h2 className="font-serif text-xl text-app-secondary">
@@ -294,11 +280,8 @@ export default function AppointmentPage() {
         {/* =================================================
             RIGHT SIDE / DOCTOR
         ================================================= */}
-        {doctor && <DoctorSidebar doctor={doctor} />}
 
-        {/* =================================================
-            RIGHT SIDE / DOCTOR
-        ================================================= */}
+        {doctor && <DoctorSidebar doctor={doctor} />}
       </div>
     </div>
   );
