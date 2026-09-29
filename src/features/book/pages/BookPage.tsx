@@ -95,6 +95,7 @@ export default function BookPage() {
         </h1>
 
         {/* data and filter */}
+
         <div className="flex flex-col gap-7 lg:flex-row lg:items-baseline  lg:justify-between">
           {/* Filters */}
           <div className="mt-6 flex flex-wrap items-center gap-2 md:gap-3">

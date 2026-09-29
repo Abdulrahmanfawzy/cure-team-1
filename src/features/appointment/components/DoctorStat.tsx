@@ -4,7 +4,7 @@ export default function DoctorStat({
   label,
 }: {
   icon: React.ReactNode;
-  value: string;
+  value: string | number;
   label: string;
 }) {
   return (

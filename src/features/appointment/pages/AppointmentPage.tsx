@@ -1,148 +1,118 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import {
-  ArrowLeft,
   CalendarDays,
   ChevronDown,
   ChevronUp,
-  Pencil,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Link } from "react-router-dom";
-import { PATHS } from "@/app/router";
+
 import ReviewCard from "../components/ReviewCard";
 import DoctorSidebar from "../components/DoctorSidebar";
 import RenderStars from "@/components/shared/common/RenderStars";
+import useSpecificDoctor from "../hooks/useSpecificDoctor";
+import AppointmentHeader from "../components/AppointmentHeader";
+import PageLoader from "@/components/shared/PageLoader";
+import { useParams } from "react-router-dom";
+import ReviewModal from "../components/ReviewModal";
 
 /* =========================================================
    TYPES
 ========================================================= */
-
-type Day = {
-  day: string;
-  date: number;
-};
-
-type TimeSlot = {
-  id: number;
-  time: string;
-};
-
-type Review = {
-  id: number;
-  name: string;
+interface SelectedDay {
+  id: string;
   date: string;
-  image: string;
-  rating: number;
-  comment: string;
-};
-
-type Doctor = {
-  name: string;
-  specialty: string;
-  image: string;
-  patients: string;
-  experience: string;
-  rating: number;
-  reviews: number;
-  about: string;
-  address: string;
-};
-
-/* =========================================================
-   MOCK DATA
-   Replace this later with API response
-========================================================= */
-
-const doctor: Doctor = {
-  name: "Dr. Jessica Turner",
-  specialty: "Pulmonologist",
-  image: "https://i.pravatar.cc/300?img=47",
-  patients: "2,000+",
-  experience: "10+",
-  rating: 4.5,
-  reviews: 1872,
-  about:
-    "Dr. Jessica Turner, a board-certified Pulmonologist with over 8 years of experience in diagnosing and treating a wide range of respiratory and pulmonary conditions.",
-  address: "129, El-Nasr Street, Cairo, Egypt",
-};
-
-const days: Day[] = [
-  { day: "Fri", date: 12 },
-  { day: "Sat", date: 13 },
-  { day: "Sun", date: 14 },
-  { day: "Mon", date: 15 },
-  { day: "Tue", date: 16 },
-  { day: "Wed", date: 17 },
-  { day: "Thu", date: 18 },
-];
-
-const timeSlots: TimeSlot[] = [
-  { id: 1, time: "9:00 AM" },
-  { id: 2, time: "10:00 AM" },
-  { id: 3, time: "11:00 AM" },
-  { id: 4, time: "12:30 AM" },
-  { id: 5, time: "5:30 PM" },
-  { id: 6, time: "7:00 PM" },
-  { id: 7, time: "9:00 PM" },
-  { id: 8, time: "10:00 PM" },
-];
-
-const reviews: Review[] = [
-  {
-    id: 1,
-    name: "Nabila Reyna",
-    date: "30 min ago",
-    image: "https://i.pravatar.cc/150?img=45",
-    rating: 4.5,
-    comment:
-      "Excellent service! Dr. Jessica Turner was attentive and thorough. The clinic was clean, and the staff were friendly. Highly recommend for in-person care!",
-  },
-  {
-    id: 2,
-    name: "Ferry Ichsan A",
-    date: "A week ago",
-    image: "https://i.pravatar.cc/150?img=11",
-    rating: 4.5,
-    comment:
-      "Quick and easy appointment! Dr. Jessica Turner was professional, and the staff made me feel comfortable. Highly recommend!",
-  },
-];
+}
 
 /* =========================================================
    PAGE
 ========================================================= */
 
 export default function AppointmentPage() {
-  const [selectedDay, setSelectedDay] = useState(15);
-  const [selectedTime, setSelectedTime] = useState("11:00 AM");
+  const { id } = useParams();
+  // test
+  const { data: doctor, isLoading } = useSpecificDoctor(
+    "01a0e8ff-60eb-708c-bec3-b7fe3a1eb596",
+    // id
+  );
+ 
+  const [selectedDay, setSelectedDay] = useState<SelectedDay | null>(null);
+  const [selectedTime, setSelectedTime] = useState<string>("");
 
-  const selectedDayData = days.find((day) => day.date === selectedDay);
+  /* =========================================================
+     AVAILABLE DAYS
+  ========================================================= */
+
+  const availableDays = useMemo(() => {
+    if (!doctor?.available_slots) return [];
+
+    const uniqueDays = new Map<string, SelectedDay>();
+
+    doctor.available_slots.forEach((slot) => {
+      if (!uniqueDays.has(slot.date)) {
+        uniqueDays.set(slot.date, {
+          id: slot.id,
+          date: slot.date,
+        });
+      }
+    });
+
+    return Array.from(uniqueDays.values());
+  }, [doctor?.available_slots]);
+
+  /* =========================================================
+     SELECTED DAY SLOTS
+  ========================================================= */
+
+  const selectedDaySlots = useMemo(() => {
+    if (!doctor?.available_slots || !selectedDay) return [];
+
+    return doctor.available_slots.filter(
+      (slot) => slot.date === selectedDay.date,
+    );
+  }, [doctor?.available_slots, selectedDay]);
+
+  /* =========================================================
+     HANDLERS
+  ========================================================= */
+
+  const handleSelectDay = (day: SelectedDay) => {
+    setSelectedDay(day);
+
+    // Reset selected time when changing the day
+    setSelectedTime("");
+  };
+
+  const handleSelectTime = (slotId: string) => {
+    setSelectedTime(slotId);
+  };
+
+  /* =========================================================
+     SELECTED SLOT
+  ========================================================= */
+
+  const selectedSlot = doctor?.available_slots.find(
+    (slot) => slot.id === selectedTime,
+  );
+
+  // loading
+  if (isLoading) {
+    return <PageLoader />;
+  }
 
   return (
     <div className="main_container py-10">
       {/* =================================================
           PAGE HEADER
       ================================================= */}
-
-      <div className="mb-5 flex items-center gap-3">
-        <Link
-          to={PATHS.doctors}
-          className="flex items-center gap-3 hover:bg-transparent"
-        >
-          <ArrowLeft size={21} strokeWidth={1.8} />
-          <h1 className="text-2xl font-noto-serif-georgian">
-            Make an appointment
-          </h1>
-        </Link>
-      </div>
+      <AppointmentHeader />
 
       {/* =================================================
           MAIN LAYOUT
       ================================================= */}
 
-      <div className="grid grid-cols-1  gap-8 xl:grid-cols-[minmax(0,1fr)_532px]">
+      <div className="grid grid-cols-1 gap-8 xl:grid-cols-[minmax(0,1fr)_532px]">
         {/* =================================================
             LEFT SIDE
         ================================================= */}
@@ -152,14 +122,15 @@ export default function AppointmentPage() {
               APPOINTMENT SELECTOR
           =============================================== */}
 
-          <Card className="rounded-2xl  p-4.5 shadow-none">
+          <Card className="rounded-2xl p-4.5 shadow-none">
             {/* Title */}
+
             <div className="flex items-center justify-between border-b border-gray-200 pb-4">
               <span className="text-xl text-app-secondary">
                 Choose date and time
               </span>
 
-              <div className="flex items-center gap-3 ">
+              <div className="flex items-center gap-3">
                 <CalendarDays size={23} strokeWidth={1.7} />
 
                 <span className="text-lg">November, 2024</span>
@@ -175,25 +146,26 @@ export default function AppointmentPage() {
                 DAYS
             ============================================= */}
 
-            <div className="mt-7 grid grid-cols-4 gap-4 sm:grid-cols-7">
-              {days.map((day) => {
-                const active = selectedDay === day.date;
+            <div className="mt-7 grid grid-cols-4 gap-4 sm:grid-cols-6">
+              {availableDays.map((day) => {
+                const active = selectedDay?.date === day.date;
+
+                const [, month, date] = day.date.split("-");
 
                 return (
                   <Button
                     key={day.date}
                     type="button"
-                    onClick={() => setSelectedDay(day.date)}
-                    size={"lg"}
+                    onClick={() => handleSelectDay(day)}
+                    size="lg"
                     className={`
                       flex
-                      h-17.25
+                      h-17
                       flex-col
                       items-center
                       justify-center
-                    py-3
+                      py-5
                       text-base
-
                       ${
                         active
                           ? "bg-app-primary text-white"
@@ -201,8 +173,9 @@ export default function AppointmentPage() {
                       }
                     `}
                   >
-                    <span>{day.day}</span>
-                    <span className="mt-1">{day.date}</span>
+                    <span>M-{month}</span>
+
+                    <span className="mt-1">D-{date}</span>
                   </Button>
                 );
               })}
@@ -213,20 +186,20 @@ export default function AppointmentPage() {
             ============================================= */}
 
             <div className="mt-7 grid grid-cols-2 gap-4 sm:grid-cols-3">
-              {timeSlots.map((slot) => {
-                const active = selectedTime === slot.time;
+              {selectedDaySlots.map((slot) => {
+                const active = selectedTime === slot.id;
 
                 return (
                   <Button
                     key={slot.id}
                     type="button"
-                    onClick={() => setSelectedTime(slot.time)}
-                    size={"lg"}
+                    onClick={() => handleSelectTime(slot.id)}
+                    size="lg"
                     className={`
-                     h-11.25
-                     py-2
-                     rounded-lg 
-                     text-base
+                      h-11.25
+                      rounded-lg
+                      py-2
+                      text-base
                       transition
                       ${
                         active
@@ -235,7 +208,7 @@ export default function AppointmentPage() {
                       }
                     `}
                   >
-                    {slot.time}
+                    {slot.start_time}
                   </Button>
                 );
               })}
@@ -254,19 +227,19 @@ export default function AppointmentPage() {
                 />
 
                 <span>
-                  Monday, November {selectedDayData?.date} -{selectedTime}
+                  {selectedDay?.date ?? ""} - {selectedSlot?.start_time ?? ""}
                 </span>
               </div>
 
               <Button
-                size={"lg"}
-                variant={"outline"}
+                size="lg"
+                variant="outline"
+                disabled={!selectedDay || !selectedSlot}
                 className="
-                 h-11.25
-                px-12
-                text-base
+                  h-11.25
+                  px-12
+                  text-base
                   hover:text-white
-               
                 "
               >
                 Book
@@ -277,20 +250,13 @@ export default function AppointmentPage() {
           {/* ===============================================
               REVIEWS HEADER
           =============================================== */}
-
           <div className="mt-8">
-            <div className="flex items-center justify-between">
+            <div className="flex items-baseline justify-between">
               <h2 className="font-serif text-xl text-app-secondary">
                 Reviews and Rating
               </h2>
 
-              <Button
-                variant="ghost"
-                className="gap-2 p-0 text-lg font-normal text-app-primary hover:bg-transparent hover:text-app-primary"
-              >
-                <Pencil size={23} />
-                add review
-              </Button>
+              <ReviewModal id={doctor?.id || "0"} />
             </div>
 
             {/* =============================================
@@ -299,16 +265,16 @@ export default function AppointmentPage() {
 
             <div className="mt-10 flex items-baseline justify-between">
               <span className="font-serif text-5xl text-app-secondary">
-                4.5/5
+                {doctor?.rating_avg ?? 0}/5
               </span>
 
               <div className="text-right">
                 <div className="flex gap-1">
-                  <RenderStars rating={2} />
+                  <RenderStars rating={doctor?.rating_avg ?? 0} />
                 </div>
 
                 <p className="mt-1 text-base text-app-neutral-darker">
-                  1250+ Reviews
+                  {doctor?.reviews_count ?? 0}+ Reviews
                 </p>
               </div>
             </div>
@@ -318,7 +284,7 @@ export default function AppointmentPage() {
             ============================================= */}
 
             <div className="mt-9 grid grid-cols-1 gap-4 lg:grid-cols-2">
-              {reviews.map((review) => (
+              {doctor?.reviews.map((review) => (
                 <ReviewCard key={review.id} review={review} />
               ))}
             </div>
@@ -328,8 +294,11 @@ export default function AppointmentPage() {
         {/* =================================================
             RIGHT SIDE / DOCTOR
         ================================================= */}
+        {doctor && <DoctorSidebar doctor={doctor} />}
 
-        <DoctorSidebar  doctor={doctor} />
+        {/* =================================================
+            RIGHT SIDE / DOCTOR
+        ================================================= */}
       </div>
     </div>
   );

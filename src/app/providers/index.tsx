@@ -1,6 +1,7 @@
-import type { ReactNode } from 'react'
-import { QueryProvider } from './query-provider'
-import { StoreProvider } from './store-provider'
+import type { ReactNode } from "react";
+import { QueryProvider } from "./query-provider";
+import { StoreProvider } from "./store-provider";
+import { Toaster } from "react-hot-toast";
 
 /**
  * AppProviders
@@ -15,7 +16,8 @@ import { StoreProvider } from './store-provider'
 export function AppProviders({ children }: { children: ReactNode }) {
   return (
     <StoreProvider>
+      <Toaster position="top-center" reverseOrder={false} />
       <QueryProvider>{children}</QueryProvider>
     </StoreProvider>
-  )
+  );
 }

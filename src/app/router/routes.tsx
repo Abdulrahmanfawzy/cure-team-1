@@ -65,7 +65,6 @@ const routes: RouteObject[] = [
 
               // book appointment
               { path: PATHS.appointment, element: <AppointmentPage /> },
-              // book
               {
                 path: PATHS.book,
                 element: <BookPage />,

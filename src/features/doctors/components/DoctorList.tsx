@@ -1,3 +1,4 @@
+import axios from "axios";
 import type { Doctor } from "../types/doctor.types";
 import { DoctorCard } from "./DoctorCard";
 
@@ -16,6 +17,7 @@ export function DoctorList({ doctors }: DoctorListProps) {
       </div>
     );
   }
+
 
   return (
     <div className="grid grid-cols-1 gap-x-2 gap-y-4 md:grid-cols-2 xl:grid-cols-3">

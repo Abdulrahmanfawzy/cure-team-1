@@ -1,19 +1,13 @@
 import { Card } from "@/components/ui/card";
 import { Star } from "lucide-react";
-type Review = {
-  id: number;
-  name: string;
-  date: string;
-  image: string;
-  rating: number;
-  comment: string;
-};
+import type { Review } from "../types/appointment.types";
+
 export default function ReviewCard({ review }: { review: Review }) {
   return (
     <Card
       className="
-        rounded-[19px]
-        border-gray-200
+        rounded-3xl
+        border-gray-300
         p-4
         shadow-none
       "
@@ -22,8 +16,8 @@ export default function ReviewCard({ review }: { review: Review }) {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <img
-            src={review.image}
-            alt={review.name}
+            src={review.patient.profile_image}
+            alt={review.patient.name}
             className="
               h-14
               w-14
@@ -33,9 +27,11 @@ export default function ReviewCard({ review }: { review: Review }) {
           />
 
           <div>
-            <h3 className="font-serif text-base ">{review.name}</h3>
+            <h3 className="font-serif text-base ">{review.patient.name}</h3>
 
-            <p className="text-[15px] text-[#737985]">{review.date}</p>
+            <p className="text-base text-app-neutral-lighter">
+              {review.created_at_human}
+            </p>
           </div>
         </div>
 
@@ -48,14 +44,14 @@ export default function ReviewCard({ review }: { review: Review }) {
             className="text-app-gold"
           />
 
-          <span className="text-[15px] font-medium text-app-gold">
+          <span className="text-base font-medium text-app-gold">
             {review.rating}
           </span>
         </div>
       </div>
 
       {/* Comment */}
-      <p className="mt-4 text-base leading-[1.35] text-[#626975]">
+      <p className=" text-base leading-[1.35] text-app-neutral">
         {review.comment}
       </p>
     </Card>

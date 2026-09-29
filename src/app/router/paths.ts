@@ -24,7 +24,7 @@ export const PATHS = {
   doctorDetails: "/doctors-details",
 
   // book
-  appointment: "/appointment",
+  appointment: "appointment/:id",
   book: "/book",
 } as const;
 

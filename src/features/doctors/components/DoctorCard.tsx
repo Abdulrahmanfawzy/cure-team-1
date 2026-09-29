@@ -1,6 +1,10 @@
 import { Clock3, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { Doctor } from "../types/doctor.types";
+import { PATHS } from "@/app/router";
+import { Link } from "react-router-dom";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
 interface DoctorCardProps {
   doctor: Doctor;
@@ -47,7 +51,11 @@ export function DoctorCard({ doctor }: DoctorCardProps) {
         <span className="text-app-error">${doctor.price}</span>
       </div>
 
-      <Button className="mt-2 h-12 w-full rounded-lg">Book appointment</Button>
+      <Link to={`/appointment/` + doctor?.id}>
+        <Button className="mt-2 h-12 w-full rounded-lg">
+          Book appointment
+        </Button>
+      </Link>
     </article>
   );
 }
