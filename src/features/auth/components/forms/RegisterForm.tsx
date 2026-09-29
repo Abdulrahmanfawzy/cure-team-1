@@ -71,7 +71,7 @@ function RegisterForm(): ReactNode {
         {register.isPending ? "Loading..." : "Sign Up"}
       </Button>
 
-      <FormFooter mode="Sign up" />
+      <FormFooter />
     </form>
   );
 }

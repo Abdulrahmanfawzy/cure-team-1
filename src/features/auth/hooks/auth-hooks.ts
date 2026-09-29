@@ -1,6 +1,9 @@
 import { useMutation } from "@tanstack/react-query";
 
 import {
+  googleCompleteRegister,
+  googleLogin,
+  googleVerifyLogin,
   loginRequest,
   registerRequest,
   verifyLogin,
@@ -8,6 +11,9 @@ import {
 } from "../api/auth-api";
 
 import type {
+  GoogleAuthResponse,
+  googleLoginPayload,
+  googleRegisterPayload,
   loginPayload,
   registerPayload,
   VerifyLoginResponse,
@@ -16,6 +22,7 @@ import type {
 
 import type { ApiResponse, AxiosErrorResponse } from "@/types/api";
 
+// Auth Functions
 export const useAuth = () => {
   const register = useMutation<
     ApiResponse<[]>,
@@ -54,5 +61,42 @@ export const useAuth = () => {
     login,
     verify_login,
     verify_register,
+  };
+};
+
+// Google Auth Functions
+export const useGoogleAuth = () => {
+  const google_login = useMutation<
+    ApiResponse<GoogleAuthResponse>,
+    AxiosErrorResponse,
+    googleLoginPayload
+  >({
+    mutationKey: ["google_login"],
+    mutationFn: (payload: googleLoginPayload) => googleLogin(payload),
+  });
+
+  const google_register = useMutation<
+    ApiResponse<[]>,
+    AxiosErrorResponse,
+    googleRegisterPayload
+  >({
+    mutationKey: ["google_login"],
+    mutationFn: (payload: googleRegisterPayload) =>
+      googleCompleteRegister(payload),
+  });
+
+  const google_verify = useMutation<
+    ApiResponse<VerifyLoginResponse>,
+    AxiosErrorResponse,
+    verifyOtpPayload
+  >({
+    mutationKey: ["google_login"],
+    mutationFn: (payload: verifyOtpPayload) => googleVerifyLogin(payload),
+  });
+
+  return {
+    google_login,
+    google_register,
+    google_verify,
   };
 };

@@ -1,5 +1,8 @@
 import { apiClient } from "@/services/axios";
 import type {
+  GoogleAuthResponse,
+  googleLoginPayload,
+  googleRegisterPayload,
   loginPayload,
   registerPayload,
   VerifyLoginResponse,
@@ -46,6 +49,45 @@ export const verifyLogin = async (
   const { data } = await apiClient.post("auth/login/verify", payload, {
     headers: {
       "Content-Type": "multipart/form-data",
+    },
+  });
+  return data;
+};
+
+// Google Auth
+
+export const googleLogin = async (
+  payload: googleLoginPayload,
+): Promise<ApiResponse<GoogleAuthResponse>> => {
+  const { data } = await apiClient.post("auth/google/callback", payload, {
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+  });
+  return data;
+};
+
+export const googleCompleteRegister = async (
+  payload: googleRegisterPayload,
+): Promise<ApiResponse<[]>> => {
+  const { data } = await apiClient.post(
+    "auth/google/complete-registration",
+    payload,
+    {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+    },
+  );
+  return data;
+};
+
+export const googleVerifyLogin = async (
+  payload: verifyOtpPayload,
+): Promise<ApiResponse<VerifyLoginResponse>> => {
+  const { data } = await apiClient.post("auth/google/verify", payload, {
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
     },
   });
   return data;

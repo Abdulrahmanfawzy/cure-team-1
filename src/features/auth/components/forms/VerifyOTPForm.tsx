@@ -13,7 +13,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { FieldError } from "@/components/ui/field";
 import type { verifyOtpPayload } from "../../types/auth-types";
 import { verifyOtpSchema } from "../../schemas/auth-schemas";
-import { useAuth } from "../../hooks/auth-hooks";
+import { useAuth, useGoogleAuth } from "../../hooks/auth-hooks";
 import { toast } from "sonner";
 import { useAppDispatch } from "@/app/store/hooks";
 import { setAuthenticated } from "../../slices/auth-slice";
@@ -40,6 +40,7 @@ function VerifyOTPForm(): ReactNode {
   });
 
   const { verify_register, verify_login } = useAuth();
+  const { google_verify } = useGoogleAuth();
 
   const submitVerifyOtpForm = (formData: verifyOtpPayload) => {
     if (formData.code === otp_code) {
@@ -61,6 +62,24 @@ function VerifyOTPForm(): ReactNode {
       // Verify Login
       if (formData.type === "login") {
         verify_login.mutate(formData, {
+          onSuccess: (data) => {
+            toast.success(data.message);
+            // add token to local storage
+            localStorage.setItem("auth_token", data.data.access_token);
+            appDispatch(setAuthenticated(true));
+            navigate(PATHS.home);
+            reset();
+          },
+          onError: (error) => {
+            console.log(error.response);
+            toast.error(error.response?.data?.message);
+          },
+        });
+      }
+
+      // Verify google
+      if (formData.type === "google-register") {
+        google_verify.mutate(formData, {
           onSuccess: (data) => {
             toast.success(data.message);
             // add token to local storage
@@ -163,11 +182,17 @@ function VerifyOTPForm(): ReactNode {
       )}
 
       <Button
-        disabled={verify_register.isPending || verify_login.isPending}
+        disabled={
+          verify_register.isPending ||
+          verify_login.isPending ||
+          google_verify.isPending
+        }
         type="submit"
         className="w-full"
       >
-        {verify_register.isPending || verify_login.isPending
+        {verify_register.isPending ||
+        verify_login.isPending ||
+        google_verify.isPending
           ? "Loading..."
           : "Verify"}
       </Button>

@@ -22,6 +22,7 @@ import ContactPage from "@/features/contact/pages/contact-page";
 import VerifyPage from "./pages/verify-page";
 import MainLayout from "./layouts/main-layout";
 import AuthGuard from "./layouts/auth-guard";
+import GoogleCompleteRegister from "@/features/auth/pages/GoogleCompleteRegister";
 
 // const routes: RouteObject[] = [
 //   {
@@ -158,6 +159,10 @@ const routes: RouteObject[] = [
           { path: PATHS.login, element: <LoginPage /> },
           { path: PATHS.register, element: <RegisterPage /> },
           { path: PATHS.verifyOTP, element: <VerifyPage /> },
+          {
+            path: PATHS.GoogleCompleteRegister,
+            element: <GoogleCompleteRegister />,
+          },
         ],
       },
     ],

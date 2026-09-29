@@ -1,5 +1,4 @@
 import axios from "axios";
-import { config } from "zod";
 
 /**
  * Centralized Axios instance.

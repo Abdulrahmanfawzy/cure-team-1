@@ -11,6 +11,8 @@ export const PATHS = {
   login: "/login",
   register: "/register",
   verifyOTP: "/verify-otp",
+  GoogleCompleteRegister: "/google_complete_register",
+
   // Protected — app shell examples
   dashboard: "/dashboard",
   settings: "/settings",
