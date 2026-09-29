@@ -1,24 +1,61 @@
-import { Bell, HeartPulse, Menu, Search, X } from "lucide-react";
+import {
+  Bell,
+  HeartPulse,
+  Menu,
+  Search,
+  X,
+} from "lucide-react";
+
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 
 import { ProfileMobilePopup } from "./profile-menu";
+import { NotificationPopup } from "./notification-popup";
+
+import {
+  useMarkNotificationAsRead,
+  useNotifications,
+} from "@/features/notifications/hooks/use-notifications";
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [isNotificationOpen, setIsNotificationOpen] = useState(false);
 
   const navigate = useNavigate();
 
+  const {
+    data: notifications = [],
+    isLoading: isNotificationsLoading,
+  } = useNotifications();
+
+  const markAsRead = useMarkNotificationAsRead();
+
+  const unreadCount = notifications.filter((notification) => {
+    if (typeof notification.is_read === "boolean") {
+      return !notification.is_read;
+    }
+
+    return notification.read_at == null;
+  }).length;
+
   const handleProfileClick = () => {
-    // Mobile
     if (window.innerWidth < 1024) {
       setIsProfileOpen(true);
       return;
     }
 
-    // Desktop
     navigate("/profile");
+  };
+
+  const handleNotificationClick = async (
+    notificationId: string,
+  ) => {
+    try {
+      await markAsRead.mutateAsync(notificationId);
+    } finally {
+      setIsNotificationOpen(false);
+    }
   };
 
   return (
@@ -32,7 +69,10 @@ export function Header() {
               className="flex shrink-0 items-center gap-2 text-app-primary"
               aria-label="Cure home"
             >
-              <HeartPulse size={30} strokeWidth={2} />
+              <HeartPulse
+                size={30}
+                strokeWidth={2}
+              />
             </Link>
 
             {/* Search */}
@@ -56,8 +96,14 @@ export function Header() {
               {/* Menu */}
               <button
                 type="button"
-                onClick={() => setIsMenuOpen((prev) => !prev)}
-                aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+                onClick={() =>
+                  setIsMenuOpen((prev) => !prev)
+                }
+                aria-label={
+                  isMenuOpen
+                    ? "Close menu"
+                    : "Open menu"
+                }
                 aria-expanded={isMenuOpen}
                 className="flex size-9 items-center justify-center rounded-md bg-app-neutral-lightest text-app-secondary transition-colors hover:bg-app-primary-lightest"
               >
@@ -69,13 +115,45 @@ export function Header() {
               </button>
 
               {/* Notification */}
-              <button
-                type="button"
-                aria-label="Notifications"
-                className="hidden size-9 items-center justify-center rounded-md bg-app-neutral-lightest text-app-secondary transition-colors hover:bg-app-primary-lightest sm:flex"
-              >
-                <Bell size={15} />
-              </button>
+              <div className="relative">
+                <button
+                  type="button"
+                  onClick={() =>
+                    setIsNotificationOpen(
+                      (prev) => !prev,
+                    )
+                  }
+                  aria-label="Notifications"
+                  aria-expanded={
+                    isNotificationOpen
+                  }
+                  className="relative flex size-9 items-center justify-center rounded-md bg-app-neutral-lightest text-app-secondary transition-colors hover:bg-app-primary-lightest"
+                >
+                  <Bell size={15} />
+
+                  {/* Green unread dot */}
+                  {unreadCount > 0 && (
+                    <span className="absolute right-1 top-1 size-2.5 rounded-full bg-green-500 ring-2 ring-app-neutral-lightest" />
+                  )}
+                </button>
+
+                {/* Notification Popup */}
+                {isNotificationOpen && (
+                  <NotificationPopup
+                    notifications={notifications}
+                    onClose={() =>
+                      setIsNotificationOpen(false)
+                    }
+                    onNotificationClick={(
+                      notification,
+                    ) =>
+                      handleNotificationClick(
+                        notification.id,
+                      )
+                    }
+                  />
+                )}
+              </div>
 
               {/* Profile */}
               <button
@@ -99,7 +177,9 @@ export function Header() {
               <nav className="p-3">
                 <Link
                   to="/"
-                  onClick={() => setIsMenuOpen(false)}
+                  onClick={() =>
+                    setIsMenuOpen(false)
+                  }
                   className="block rounded-xl px-4 py-3 text-sm font-medium text-app-secondary hover:bg-app-primary-lightest"
                 >
                   Home
@@ -107,7 +187,9 @@ export function Header() {
 
                 <Link
                   to="/booking"
-                  onClick={() => setIsMenuOpen(false)}
+                  onClick={() =>
+                    setIsMenuOpen(false)
+                  }
                   className="block rounded-xl px-4 py-3 text-sm font-medium text-app-secondary hover:bg-app-primary-lightest"
                 >
                   Booking
@@ -115,7 +197,9 @@ export function Header() {
 
                 <Link
                   to="/chat"
-                  onClick={() => setIsMenuOpen(false)}
+                  onClick={() =>
+                    setIsMenuOpen(false)
+                  }
                   className="block rounded-xl px-4 py-3 text-sm font-medium text-app-secondary hover:bg-app-primary-lightest"
                 >
                   Chat
@@ -126,10 +210,12 @@ export function Header() {
         </div>
       </header>
 
-      {/* Mobile Profile Popup */}
+      {/* Mobile Profile */}
       {isProfileOpen && (
         <ProfileMobilePopup
-          onClose={() => setIsProfileOpen(false)}
+          onClose={() =>
+            setIsProfileOpen(false)
+          }
         />
       )}
     </>
