@@ -134,6 +134,7 @@ const PersonalInformationForm = () => {
             <Button
               variant={"destructive"}
               type="button"
+              disabled={isPending}
               onClick={() => setEditMode(!editMode)}
               className="w-1/2"
             >

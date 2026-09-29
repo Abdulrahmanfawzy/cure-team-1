@@ -5,6 +5,7 @@ import {
   googleLogin,
   googleVerifyLogin,
   loginRequest,
+  logoutRequest,
   registerRequest,
   verifyLogin,
   verifyRegister,
@@ -15,6 +16,7 @@ import type {
   googleLoginPayload,
   googleRegisterPayload,
   loginPayload,
+  logoutPayload,
   registerPayload,
   VerifyLoginResponse,
   verifyOtpPayload,
@@ -56,11 +58,21 @@ export const useAuth = () => {
     mutationFn: (payload: verifyOtpPayload) => verifyLogin(payload),
   });
 
+  const logout = useMutation<
+    ApiResponse<[]>,
+    AxiosErrorResponse,
+    logoutPayload
+  >({
+    mutationKey: ["verify_login"],
+    mutationFn: (payload: logoutPayload) => logoutRequest(payload),
+  });
+
   return {
     register,
     login,
     verify_login,
     verify_register,
+    logout,
   };
 };
 

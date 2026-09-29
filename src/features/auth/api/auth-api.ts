@@ -4,11 +4,19 @@ import type {
   googleLoginPayload,
   googleRegisterPayload,
   loginPayload,
+  logoutPayload,
   registerPayload,
   VerifyLoginResponse,
   verifyOtpPayload,
 } from "../types/auth-types";
 import type { ApiResponse } from "@/types/api";
+
+export const logoutRequest = async (
+  payload: logoutPayload,
+): Promise<ApiResponse<[]>> => {
+  const { data } = await apiClient.post("auth/logout", payload);
+  return data;
+};
 
 export const registerRequest = async (
   payload: registerPayload,
