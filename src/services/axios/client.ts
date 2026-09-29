@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from "axios";
 
 /**
  * Centralized Axios instance.
@@ -12,10 +12,14 @@ import axios from 'axios'
  * Env vars are defined in `.env` / `.env.local` (see `.env.example`).
  */
 export const apiClient = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL ?? '/api',
-  headers: {
-    'Content-Type': 'application/json',
-    // Add default headers here (e.g. locale, client version).
-  },
+  baseURL: import.meta.env.VITE_API_BASE_URL,
   timeout: 15_000,
-})
+});
+
+apiClient.interceptors.request.use((config) => {
+  const token = localStorage.getItem("auth_token");
+  if (token) {
+    config.headers.Authorization = `bearer ${token}`;
+  }
+  return config;
+});

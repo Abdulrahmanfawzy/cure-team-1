@@ -60,8 +60,8 @@ export function Header() {
 
   return (
     <>
-      <header className="absolute inset-x-0 top-0 z-50">
-        <div className="main_contaoner">
+      <header className="sticky bg-white inset-x-0 top-0 z-50">
+        <div className="main_container">
           <div className="flex h-18 items-center justify-between gap-4">
             {/* Logo */}
             <Link
@@ -107,11 +107,7 @@ export function Header() {
                 aria-expanded={isMenuOpen}
                 className="flex size-9 items-center justify-center rounded-md bg-app-neutral-lightest text-app-secondary transition-colors hover:bg-app-primary-lightest"
               >
-                {isMenuOpen ? (
-                  <X size={17} />
-                ) : (
-                  <Menu size={17} />
-                )}
+                {isMenuOpen ? <X size={17} /> : <Menu size={17} />}
               </button>
 
               {/* Notification */}
@@ -212,11 +208,7 @@ export function Header() {
 
       {/* Mobile Profile */}
       {isProfileOpen && (
-        <ProfileMobilePopup
-          onClose={() =>
-            setIsProfileOpen(false)
-          }
-        />
+        <ProfileMobilePopup onClose={() => setIsProfileOpen(false)} />
       )}
     </>
   );

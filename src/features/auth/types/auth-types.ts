@@ -1,19 +1,28 @@
-/**
- * Auth feature types.
- *
- * Domain models and DTOs for authentication live here:
- * - User / Session
- * - LoginPayload, RegisterPayload
- * - AuthResponse (tokens, user)
- *
- * Keep these aligned with the API contract; prefer Zod-inferred types
- * for anything that crosses the network boundary.
- *
- * Example:
- *   export interface User { id: string; email: string; name: string }
- */
-export interface User {
-  id: string
-  email: string
-  name: string
-}
+import z from "zod";
+import {
+  googleRegisterSchema,
+  loginSchema,
+  registerSchema,
+  verifyOtpSchema,
+} from "../schemas/auth-schemas";
+
+export type registerPayload = z.infer<typeof registerSchema>;
+export type loginPayload = z.infer<typeof loginSchema>;
+export type verifyOtpPayload = z.infer<typeof verifyOtpSchema>;
+export type googleRegisterPayload = z.infer<typeof googleRegisterSchema>;
+
+export type VerifyLoginResponse = {
+  access_token: string;
+  access_token_expires_at: string;
+  raw_refresh_token: string;
+  refresh_token_expires_at: string;
+  token_type: string;
+};
+export type googleLoginResponse = {
+  temp_token: string;
+};
+export type googleLoginPayload = {
+  token: string;
+};
+
+export type GoogleAuthResponse = googleLoginResponse | VerifyLoginResponse;

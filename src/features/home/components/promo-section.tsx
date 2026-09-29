@@ -12,7 +12,7 @@ export function AppPromoSection() {
         md:-mb-18
       "
     >
-      <div className="main_contaoner">
+      <div className="main_container">
         <div
           className="
             relative overflow-hidden
@@ -90,9 +90,7 @@ function StoreButton({
         className="size-5 object-contain"
       />
 
-      <span className="flex flex-col items-start leading-none">
-        {children}
-      </span>
+      <span className="flex flex-col items-start leading-none">{children}</span>
     </button>
   );
 }

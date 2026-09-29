@@ -15,11 +15,11 @@ export function HeroSection() {
 
       <div className="pointer-events-none absolute left-1/2 top-18 -z-10 size-110 -translate-x-1/2 rounded-full border border-app-primary-lightest md:size-170" />
 
-      <div className="main_contaoner">
+      <div className="main_container">
         <div className="mx-auto flex max-w-150 flex-col items-center text-center">
           {/* Badge */}
           <div className="mb-5 inline-flex items-center gap-2 rounded-full bg-app-primary-lightest px-3 py-1 text-[9px] font-medium text-app-primary">
-            <Sparkles size={18}/>
+            <Sparkles size={18} />
             Upgrade your account
           </div>
 
@@ -44,8 +44,8 @@ export function HeroSection() {
               md:text-sm
             "
           >
-            Easily find top-rated specialists near you and book appointments
-            in just a few clicks. Whether you need an in-person visit or
+            Easily find top-rated specialists near you and book appointments in
+            just a few clicks. Whether you need an in-person visit or
             consultation, we're here to connect you with the right care—fast,
             simple, and secure.
           </p>

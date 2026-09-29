@@ -1,12 +1,11 @@
 import { MapPin, Search } from "lucide-react";
 
-const mapUrl =
-  "https://www.google.com/maps/embed?pb=YOUR_REAL_MAP_URL";
+const mapUrl = "https://www.google.com/maps/embed?pb=YOUR_REAL_MAP_URL";
 
 export function LocationSection() {
   return (
     <section className="pb-18 md:pb-24">
-      <div className="main_contaoner">
+      <div className="main_container">
         <div className="grid items-center gap-8 md:grid-cols-2 md:gap-12">
           <div className="max-w-100">
             <h2 className="font-serif text-2xl leading-tight text-app-secondary md:text-3xl">

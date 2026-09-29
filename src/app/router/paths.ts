@@ -6,15 +6,29 @@
  * and re-exported for the router.
  */
 export const PATHS = {
-  home: '/',
-  // Public — auth (stubs until the auth feature is implemented)
-  login: '/login',
-  register: '/register',
-  forgotPassword: '/forgot-password',
-  // Protected — app shell examples
-  dashboard: '/dashboard',
-  settings: '/settings',
-  contact: "/contact",
-} as const
+  home: "/",
+  // Public
+  login: "/login",
+  register: "/register",
+  verifyOTP: "/verify-otp",
+  GoogleCompleteRegister: "/google_complete_register",
 
-export type PathKey = keyof typeof PATHS
+  // Protected — app shell examples
+  dashboard: "/dashboard",
+  settings: "/settings",
+  contact: "/contact",
+
+  // Profile
+  profile: "/profile",
+  personalInformation: "personal-information",
+  passwordManagement: "password-management",
+  doctors: "/doctors",
+  doctorDetails: "/doctors-details",
+
+  // book
+  appointment: "/appointment",
+  book: "/book",
+  chat: "/chat",
+} as const;
+
+export type PathKey = keyof typeof PATHS;
