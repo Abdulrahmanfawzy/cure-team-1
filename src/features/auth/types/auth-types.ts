@@ -24,5 +24,8 @@ export type googleLoginResponse = {
 export type googleLoginPayload = {
   token: string;
 };
+export type logoutPayload = {
+  refresh_token: string;
+};
 
 export type GoogleAuthResponse = googleLoginResponse | VerifyLoginResponse;

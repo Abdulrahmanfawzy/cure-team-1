@@ -2,10 +2,10 @@ import { PATHS } from "@/app/router";
 import { cn } from "cn";
 import {
   // LockKeyhole,
-  LogOutIcon,
   User,
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
+import LogoutButton from "./LogoutButton";
 
 function Links() {
   const { pathname } = useLocation();
@@ -43,10 +43,7 @@ function Links() {
         </div>
       </Link> */}
 
-      <button className="flex cursor-pointer items-center gap-2 text-app-error  pr-4 pl-3 h-12 rounded-md text-base">
-        <LogOutIcon size={24} />
-        <span>Log out</span>
-      </button>
+      <LogoutButton />
     </div>
   );
 }

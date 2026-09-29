@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { useGoogleAuth } from "../hooks/auth-hooks";
 import type { googleLoginPayload } from "../types/auth-types";
 import { setAuthenticated } from "../slices/auth-slice";
+import { authStorage } from "../utils/auth-storage";
 
 interface GoogleLoginProps {
   mode?: "Sign in";
@@ -61,7 +62,7 @@ function GoogleLogin({ mode }: GoogleLoginProps) {
     }
 
     // Existing Google user
-    localStorage.setItem("auth_token", data.data.access_token);
+    authStorage.setTokens(data.data.access_token, data.data.raw_refresh_token);
     dispatch(setAuthenticated(true));
     toast.success(data.message);
     navigate(PATHS.home, { replace: true });
@@ -90,7 +91,6 @@ function GoogleLogin({ mode }: GoogleLoginProps) {
 
     onError: (error) => {
       console.error("Google OAuth error:", error);
-
       toast.error("Google login failed. Please try again.");
     },
   });

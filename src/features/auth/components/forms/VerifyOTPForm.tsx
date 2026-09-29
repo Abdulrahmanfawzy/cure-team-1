@@ -17,6 +17,7 @@ import { useAuth, useGoogleAuth } from "../../hooks/auth-hooks";
 import { toast } from "sonner";
 import { useAppDispatch } from "@/app/store/hooks";
 import { setAuthenticated } from "../../slices/auth-slice";
+import { authStorage } from "../../utils/auth-storage";
 
 // Code Otp
 const otp_code = "1234";
@@ -65,7 +66,10 @@ function VerifyOTPForm(): ReactNode {
           onSuccess: (data) => {
             toast.success(data.message);
             // add token to local storage
-            localStorage.setItem("auth_token", data.data.access_token);
+            authStorage.setTokens(
+              data.data.access_token,
+              data.data.raw_refresh_token,
+            );
             appDispatch(setAuthenticated(true));
             navigate(PATHS.home);
             reset();
@@ -83,7 +87,10 @@ function VerifyOTPForm(): ReactNode {
           onSuccess: (data) => {
             toast.success(data.message);
             // add token to local storage
-            localStorage.setItem("auth_token", data.data.access_token);
+            authStorage.setTokens(
+              data.data.access_token,
+              data.data.raw_refresh_token,
+            );
             appDispatch(setAuthenticated(true));
             navigate(PATHS.home);
             reset();
