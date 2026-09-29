@@ -23,6 +23,8 @@ import VerifyPage from "./pages/verify-page";
 import MainLayout from "./layouts/main-layout";
 import AuthGuard from "./layouts/auth-guard";
 import GoogleCompleteRegister from "@/features/auth/pages/GoogleCompleteRegister";
+import AuthLayout from "./layouts/auth-layout";
+import ChatPage from "@/features/chat/pages/ChatPage";
 
 // const routes: RouteObject[] = [
 //   {
@@ -139,6 +141,10 @@ const routes: RouteObject[] = [
               {
                 path: PATHS.book,
                 element: <BookPage />,
+              },
+              {
+                path: PATHS.chat,
+                element: <ChatPage />,
               },
             ],
           },
