@@ -7,7 +7,7 @@ import {
 import {
   getNotifications,
   markNotificationAsRead,
-} from "../api/notification-api";
+} from "../api/notifications-api";
 
 export function useNotifications() {
   return useQuery({

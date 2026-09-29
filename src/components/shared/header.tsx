@@ -16,7 +16,6 @@ import {
   useMarkNotificationAsRead,
   useNotifications,
 } from "@/features/notifications/hooks/use-notifications";
-
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
@@ -86,6 +85,18 @@ export function Header() {
                 <input
                   type="search"
                   placeholder="Search about specialty, doctor"
+                    onKeyDown={(event) => {
+    if (event.key === "Enter") {
+      const value = event.currentTarget.value.trim();
+
+      navigate(
+        value
+          ? `/doctors?search=${encodeURIComponent(value)}`
+          : "/doctors",
+      );
+    }
+  }}
+
                   className="h-9 w-full rounded-md bg-app-neutral-lightest pl-9 pr-3 text-[11px] text-app-secondary outline-none placeholder:text-app-neutral focus:ring-1 focus:ring-app-primary-lighter"
                 />
               </label>
