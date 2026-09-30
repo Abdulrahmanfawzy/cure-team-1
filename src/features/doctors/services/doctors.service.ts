@@ -1,12 +1,11 @@
 import axios from 'axios'
-import { apiClient } from '@/services/axios/client'
-
 import type {
   Doctor,
   DoctorApiResponse,
   DoctorSearchFilters,
   DoctorsSearchResponse,
 } from '../types/doctor.types'
+import { apiClient } from '@/services/axios/client'
 
 const buildSearchParams = (
   filters: DoctorSearchFilters,

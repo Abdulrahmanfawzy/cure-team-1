@@ -1,21 +1,60 @@
-export interface Doctor {
-  id: number;
+export interface HomeApiResponse<T> {
+  success: boolean;
+  message: string;
+  data: T;
+}
+
+export interface Specialty {
+  id: string;
   name: string;
-  specialty: string;
+  icone: string;
+}
+
+export interface DoctorAvailability {
+  id: string;
+  date: string;
+  start_time: string;
+  end_time: string;
+  is_booked: boolean;
+}
+
+export interface Doctor {
+  id: string;
+  name: string;
+  specialist: Specialty;
+  about: string;
+  experience: string;
+  consultation_price: string;
+  rating_avg: string;
+  rating_count: number;
+  profile_image: string;
+  availabilities: DoctorAvailability[];
+  latitude: number;
+  longitude: number;
+  gender: string;
+  opening_hours: string;
+  consultation_type: string;
   hospital: string;
-  rating: number;
-  availability: string;
-  price: string;
-  image: string;
+  distance: number | null;
+}
+
+export interface ReviewPatient {
+  id: string;
+  name: string;
+  profile_image: string;
 }
 
 export interface Review {
-  id: number;
-  image: string;
+  id: string;
+  rating: number;
+  comment: string;
+  created_at: string;
+  created_at_human: string;
+  patient: ReviewPatient;
 }
 
 export interface FAQItem {
-  id: number;
+  id: string;
   question: string;
   answer: string;
 }

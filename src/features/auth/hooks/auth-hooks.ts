@@ -7,6 +7,7 @@ import {
   loginRequest,
   logoutRequest,
   registerRequest,
+  resendOtp,
   verifyLogin,
   verifyRegister,
 } from "../api/auth-api";
@@ -18,6 +19,8 @@ import type {
   loginPayload,
   logoutPayload,
   registerPayload,
+  resendOtpPayload,
+  resendOtpResponse,
   VerifyLoginResponse,
   verifyOtpPayload,
 } from "../types/auth-types";
@@ -36,7 +39,7 @@ export const useAuth = () => {
   });
 
   const verify_register = useMutation<
-    ApiResponse<[]>,
+    ApiResponse<VerifyLoginResponse>,
     AxiosErrorResponse,
     verifyOtpPayload
   >({
@@ -67,12 +70,22 @@ export const useAuth = () => {
     mutationFn: (payload: logoutPayload) => logoutRequest(payload),
   });
 
+  const resend_otp = useMutation<
+    ApiResponse<resendOtpResponse>,
+    AxiosErrorResponse,
+    resendOtpPayload
+  >({
+    mutationKey: ["verify_login"],
+    mutationFn: (payload: resendOtpPayload) => resendOtp(payload),
+  });
+
   return {
     register,
     login,
     verify_login,
     verify_register,
     logout,
+    resend_otp,
   };
 };
 

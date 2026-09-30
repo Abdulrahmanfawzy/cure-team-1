@@ -30,7 +30,7 @@ function LoginForm(): ReactNode {
         reset();
       },
       onError: (error) => {
-        console.log(error.response);
+        console.error(error.response);
         toast.error(error.response?.data?.message);
       },
     });
@@ -47,8 +47,13 @@ function LoginForm(): ReactNode {
         placeholder="Enter your number"
       />
 
-      <Button disabled={login.isPending} type="submit" className="w-full">
-        {login.isPending ? "Loading..." : "Sign In"}
+      <Button
+        isLoading={login.isPending}
+        disabled={login.isPending}
+        type="submit"
+        className="w-full"
+      >
+        Sign In
       </Button>
 
       <FormFooter mode="Sign in" />
