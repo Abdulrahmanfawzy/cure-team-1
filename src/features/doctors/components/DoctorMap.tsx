@@ -1,71 +1,49 @@
-import {
-  useEffect,
-  useMemo,
-} from 'react'
+import { useEffect, useMemo } from "react";
 
-import L from 'leaflet'
-import 'leaflet/dist/leaflet.css'
+import L from "leaflet";
 
-import {
-  MapContainer,
-  Marker,
-  TileLayer,
-  Tooltip,
-  useMap,
-} from 'react-leaflet'
+import { useMap } from "react-leaflet";
 
-import type { Doctor } from '../types/doctor.types'
+import { Map, MapMarker } from "@/components/shared";
 
-import './DoctorMap.css'
+import type { Doctor } from "../types/doctor.types";
 
-import { DoctorMapCard } from './DoctorMapCard'
+import "./DoctorMap.css";
+
+import { DoctorMapCard } from "./DoctorMapCard";
 
 interface DoctorMapProps {
-  doctors: Doctor[]
+  doctors: Doctor[];
 }
 
-const DEFAULT_CENTER: [
-  number,
-  number,
-] = [20, 0]
+const DEFAULT_CENTER: [number, number] = [20, 0];
 
-function MapBounds({
-  doctors,
-}: DoctorMapProps) {
-  const map = useMap()
+function MapBounds({ doctors }: DoctorMapProps) {
+  const map = useMap();
 
   useEffect(() => {
     if (!doctors.length) {
-      return
+      return;
     }
 
-    const bounds =
-      L.latLngBounds(
-        doctors.map((doctor) => [
-          doctor.latitude,
-          doctor.longitude,
-        ]),
-      )
+    const bounds = L.latLngBounds(
+      doctors.map((doctor) => [doctor.latitude, doctor.longitude]),
+    );
 
     map.fitBounds(bounds, {
       padding: [48, 48],
       maxZoom: 12,
-    })
-  }, [doctors, map])
+    });
+  }, [doctors, map]);
 
-  return null
+  return null;
 }
 
-function DoctorMarker({
-  doctor,
-}: {
-  doctor: Doctor
-}) {
+function DoctorMarker({ doctor }: { doctor: Doctor }) {
   const icon = useMemo(
     () =>
       L.divIcon({
-        className:
-          'doctor-map-marker',
+        className: "doctor-map-marker",
 
         html: `
           <div
@@ -80,84 +58,43 @@ function DoctorMarker({
 
         iconAnchor: [16, 40],
 
-        tooltipAnchor: [
-          0,
-          -32,
-        ],
+        tooltipAnchor: [0, -32],
       }),
     [],
-  )
+  );
 
   return (
-    <Marker
-      position={[
-        doctor.latitude,
-        doctor.longitude,
-      ]}
+    <MapMarker
+      position={[doctor.latitude, doctor.longitude]}
       icon={icon}
-    >
-      <Tooltip
-        direction="top"
-        offset={[0, -8]}
-        opacity={1}
-        className="doctor-map-tooltip"
-      >
-        <DoctorMapCard
-          doctor={doctor}
-        />
-      </Tooltip>
-    </Marker>
-  )
+      tooltipClassName="doctor-map-tooltip"
+      tooltip={<DoctorMapCard doctor={doctor} />}
+    />
+  );
 }
 
-export function DoctorMap({
-  doctors,
-}: DoctorMapProps) {
+export function DoctorMap({ doctors }: DoctorMapProps) {
   const center = doctors.length
-    ? ([
-        doctors[0].latitude,
-        doctors[0].longitude,
-      ] as [
-        number,
-        number,
-      ])
-    : DEFAULT_CENTER
+    ? ([doctors[0].latitude, doctors[0].longitude] as [number, number])
+    : DEFAULT_CENTER;
 
   return (
     <div className="relative mt-8 h-[min(70vh,640px)] min-h-105 overflow-hidden rounded-xl border border-app-neutral-lighter">
-      <MapContainer
-        center={center}
-        zoom={12}
-        scrollWheelZoom
-        className="h-full w-full"
-      >
-        <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
+      <Map center={center} zoom={12}>
+        <MapBounds doctors={doctors} />
 
-        <MapBounds
-          doctors={doctors}
-        />
-
-        {doctors.map(
-          (doctor) => (
-            <DoctorMarker
-              key={doctor.id}
-              doctor={doctor}
-            />
-          ),
-        )}
-      </MapContainer>
+        {doctors.map((doctor) => (
+          <DoctorMarker key={doctor.id} doctor={doctor} />
+        ))}
+      </Map>
 
       {!doctors.length && (
         <div className="pointer-events-none absolute inset-0 z-1000 flex items-center justify-center bg-white/60">
           <p className="rounded-lg bg-white px-4 py-3 text-sm text-app-neutral-darker shadow">
-            No doctors found for
-            the current filters.
+            No doctors found for the current filters.
           </p>
         </div>
       )}
     </div>
-  )
+  );
 }

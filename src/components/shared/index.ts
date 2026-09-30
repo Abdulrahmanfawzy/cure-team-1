@@ -12,10 +12,12 @@
 
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
-import { DoctorCard } from './DoctorCard'
-import { StarRating } from './star-rating'
+import { DoctorCard } from "./DoctorCard";
+import { StarRating } from "./star-rating";
+export { Map } from "./map";
+export type { MapProps } from "./map";
 
+export { MapMarker } from "./map-marker";
+export type { MapMarkerProps } from "./map-marker";
 export { Input, Label, DoctorCard, StarRating };
-export type {
-  DoctorCardData,
-} from './DoctorCard'
+export type { DoctorCardData } from "./DoctorCard";
