@@ -12,5 +12,10 @@
 
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
+import { DoctorCard } from './DoctorCard'
+import { StarRating } from './star-rating'
 
-export { Input, Label };
+export { Input, Label, DoctorCard, StarRating };
+export type {
+  DoctorCardData,
+} from './DoctorCard'
