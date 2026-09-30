@@ -27,7 +27,7 @@ function ProfileLayout() {
           toast.success(data.message);
         },
         onError: (error) => {
-          console.log(error?.response);
+          console.error(error?.response);
           toast.error(error?.response?.data?.message);
         },
       });
@@ -43,7 +43,7 @@ function ProfileLayout() {
   if (isLoading) {
     return (
       <div className="main_container my-16">
-        <ProfileSkeleton />;
+        <ProfileSkeleton />
       </div>
     );
   }

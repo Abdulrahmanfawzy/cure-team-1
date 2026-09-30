@@ -5,11 +5,22 @@ import type {
   googleRegisterPayload,
   loginPayload,
   logoutPayload,
+  refreshTokenPayload,
   registerPayload,
+  resendOtpPayload,
+  resendOtpResponse,
   VerifyLoginResponse,
   verifyOtpPayload,
 } from "../types/auth-types";
 import type { ApiResponse } from "@/types/api";
+import { refreshTokenApiClient } from "@/services/axios/client";
+
+export const resendOtp = async (
+  payload: resendOtpPayload,
+): Promise<ApiResponse<resendOtpResponse>> => {
+  const { data } = await apiClient.post("auth/resend", payload);
+  return data;
+};
 
 export const logoutRequest = async (
   payload: logoutPayload,
@@ -42,7 +53,7 @@ export const loginRequest = async (
 
 export const verifyRegister = async (
   payload: verifyOtpPayload,
-): Promise<ApiResponse<[]>> => {
+): Promise<ApiResponse<VerifyLoginResponse>> => {
   const { data } = await apiClient.post("auth/register/verify", payload, {
     headers: {
       "Content-Type": "multipart/form-data",
@@ -98,5 +109,14 @@ export const googleVerifyLogin = async (
       "Content-Type": "application/x-www-form-urlencoded",
     },
   });
+  return data;
+};
+
+// refresh  access Token
+
+export const refreshToken = async (
+  payload: refreshTokenPayload,
+): Promise<ApiResponse<VerifyLoginResponse>> => {
+  const { data } = await refreshTokenApiClient.post("auth/refresh", payload);
   return data;
 };

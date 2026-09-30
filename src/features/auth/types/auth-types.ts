@@ -18,14 +18,29 @@ export type VerifyLoginResponse = {
   refresh_token_expires_at: string;
   token_type: string;
 };
+
 export type googleLoginResponse = {
   temp_token: string;
 };
+
 export type googleLoginPayload = {
   token: string;
 };
+
 export type logoutPayload = {
   refresh_token: string;
 };
 
 export type GoogleAuthResponse = googleLoginResponse | VerifyLoginResponse;
+
+export type resendOtpPayload = {
+  phone: string;
+  type: string;
+};
+export type resendOtpResponse = {
+  resend_available_at: string;
+};
+
+export type refreshTokenPayload = {
+  refresh_token: string;
+};
