@@ -1,9 +1,10 @@
-type AppointmentStatus = "Upcoming" | "Completed" | "Canceled";
+type AppointmentStatus = "upcoming" | "completed" | "canceled" | "pending";
 export default function StatusLabel({ status }: { status: AppointmentStatus }) {
   const statusClasses = {
-    Upcoming: "text-[#1762BD]",
-    Completed: "text-[#32B54A]",
-    Canceled: "text-[#FF3D3D]",
+    upcoming: "text-[#1762BD]",
+    completed: "text-[#32B54A]",
+    canceled: "text-[#FF3D3D]",
+    pending: "text-[#ff9800]",
   };
 
   return (
