@@ -1,4 +1,3 @@
-import { apiClient } from "@/services/axios";
 import type {
   GoogleAuthResponse,
   googleLoginPayload,
@@ -13,7 +12,7 @@ import type {
   verifyOtpPayload,
 } from "../types/auth-types";
 import type { ApiResponse } from "@/types/api";
-import { refreshTokenApiClient } from "@/services/axios/client";
+import { apiClient, refreshTokenApiClient } from "@/services/axios/client";
 
 export const resendOtp = async (
   payload: resendOtpPayload,

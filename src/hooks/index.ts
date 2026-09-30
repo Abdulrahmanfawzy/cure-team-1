@@ -5,4 +5,4 @@
  * useLocalStorage). Feature-specific hooks belong in
  * `features/<name>/hooks/`.
  */
-export {}
+export { useDebounce } from './use-debounce'

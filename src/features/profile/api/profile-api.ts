@@ -1,10 +1,10 @@
-import { apiClient } from "@/services/axios";
 import type { ApiResponse } from "@/types/api";
 import type {
   PersonalInformationPayload,
   ProfileResponse,
   UserImage,
 } from "../types/profile-type";
+import { apiClient } from "@/services/axios/client";
 
 export const getProfile = async (): Promise<ApiResponse<ProfileResponse>> => {
   const { data } = await apiClient.get("profile");

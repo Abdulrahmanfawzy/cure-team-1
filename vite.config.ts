@@ -14,4 +14,12 @@ export default defineConfig({
       '@': srcPath,
     },
   },
+  server: {
+  proxy: {
+    '/api': {
+      target: 'https://round-13-cure.huma-volve.com',
+      changeOrigin: true,
+    },
+  },
+},
 })

@@ -6,6 +6,10 @@ import axios from "axios";
 export const apiClient = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
   timeout: 15_000,
+  headers: {
+    Accept: "application/json",
+    "Content-Type": "application/json",
+  },
 });
 
 export const refreshTokenApiClient = axios.create({
@@ -41,7 +45,8 @@ apiClient.interceptors.request.use(async (config) => {
   }
 
   if (token) {
-    config.headers.Authorization = `bearer ${token}`;
+    config.headers.Authorization = `Bearer ${token}`;
   }
+
   return config;
 });
