@@ -3,7 +3,7 @@ import { setupInterceptors } from "./interceptors";
 
 setupInterceptors(apiClient);
 
-export { apiClient };
+// export { apiClient };
 
 export type {
   ApiErrorBody,

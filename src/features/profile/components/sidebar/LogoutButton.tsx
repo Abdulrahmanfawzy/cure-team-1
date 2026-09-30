@@ -7,6 +7,7 @@ import { authStorage } from "@/features/auth/utils/auth-storage";
 import { LogOutIcon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import LogoutLoading from "./LogoutLoading";
 
 function LogoutButton() {
   const { logout } = useAuth();
@@ -20,7 +21,7 @@ function LogoutButton() {
     };
 
     if (refresh_token === undefined) return;
-    console.log("logout comp", refresh_token);
+
     logout.mutate(refresh_token, {
       onSuccess: (data) => {
         navigate(PATHS.login, { replace: true });
@@ -29,21 +30,14 @@ function LogoutButton() {
         dispatch(setAuthenticated(false));
       },
       onError: (error) => {
-        console.log(error.response);
+        console.error(error.response);
         toast.error(error.response?.data?.message);
       },
     });
   };
 
   if (logout.isPending) {
-    return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-white/70 backdrop-blur-sm">
-        <div className="flex items-center gap-2">
-          <div className="h-5 w-5 animate-spin rounded-full border-2 border-gray-300 border-t-primary" />
-          <span>Logging out...</span>
-        </div>
-      </div>
-    );
+    return <LogoutLoading />;
   }
   return (
     <button

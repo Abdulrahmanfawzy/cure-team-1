@@ -6,12 +6,15 @@ import {
   InputOTPSlot,
 } from "@/components/ui/input-otp";
 import { useEffect, useState, type ReactNode } from "react";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { Link, Navigate, useNavigate, useSearchParams } from "react-router-dom";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { FieldError } from "@/components/ui/field";
-import type { verifyOtpPayload } from "../../types/auth-types";
+import type {
+  resendOtpPayload,
+  verifyOtpPayload,
+} from "../../types/auth-types";
 import { verifyOtpSchema } from "../../schemas/auth-schemas";
 import { useAuth, useGoogleAuth } from "../../hooks/auth-hooks";
 import { toast } from "sonner";
@@ -23,7 +26,17 @@ import { authStorage } from "../../utils/auth-storage";
 const otp_code = "1234";
 
 function VerifyOTPForm(): ReactNode {
+  // Get Data From URL
   const [searchParams] = useSearchParams();
+  const phone = searchParams.get("phone") ?? "";
+  const type = searchParams.get("type") ?? "";
+
+  // Protected
+  if (!phone || !type) {
+    return <Navigate to={PATHS.login} replace />;
+  }
+
+  // Set code time invalid
   const [otpTimeInvalid, setOtpTimeInvalid] = useState(60);
 
   const navigate = useNavigate();
@@ -34,15 +47,16 @@ function VerifyOTPForm(): ReactNode {
   const { control, handleSubmit, setError, reset } = useForm<verifyOtpPayload>({
     defaultValues: {
       code: "",
-      phone: searchParams.get("phone") ?? "",
-      type: searchParams.get("type") ?? "",
+      phone: phone,
+      type: type,
     },
     resolver: zodResolver(verifyOtpSchema),
   });
 
-  const { verify_register, verify_login } = useAuth();
+  const { verify_register, verify_login, resend_otp } = useAuth();
   const { google_verify } = useGoogleAuth();
 
+  // Verify states
   const submitVerifyOtpForm = (formData: verifyOtpPayload) => {
     if (formData.code === otp_code) {
       // Verify Register
@@ -50,11 +64,19 @@ function VerifyOTPForm(): ReactNode {
         verify_register.mutate(formData, {
           onSuccess: (data) => {
             toast.success(data.message);
-            navigate(PATHS.login);
+            // add token to local storage
+            authStorage.setTokens(
+              data.data.access_token,
+              data.data.raw_refresh_token,
+              data.data.refresh_token_expires_at,
+              data.data.access_token_expires_at,
+            );
+            appDispatch(setAuthenticated(true));
+            navigate(PATHS.home);
             reset();
           },
           onError: (error) => {
-            console.log(error.response);
+            console.error(error.response);
             toast.error(error.response?.data?.message);
           },
         });
@@ -69,13 +91,15 @@ function VerifyOTPForm(): ReactNode {
             authStorage.setTokens(
               data.data.access_token,
               data.data.raw_refresh_token,
+              data.data.refresh_token_expires_at,
+              data.data.access_token_expires_at,
             );
             appDispatch(setAuthenticated(true));
             navigate(PATHS.home);
             reset();
           },
           onError: (error) => {
-            console.log(error.response);
+            console.error(error.response);
             toast.error(error.response?.data?.message);
           },
         });
@@ -90,13 +114,15 @@ function VerifyOTPForm(): ReactNode {
             authStorage.setTokens(
               data.data.access_token,
               data.data.raw_refresh_token,
+              data.data.refresh_token_expires_at,
+              data.data.access_token_expires_at,
             );
             appDispatch(setAuthenticated(true));
             navigate(PATHS.home);
             reset();
           },
           onError: (error) => {
-            console.log(error.response);
+            console.error(error.response);
             toast.error(error.response?.data?.message);
           },
         });
@@ -104,6 +130,22 @@ function VerifyOTPForm(): ReactNode {
     } else {
       setError("code", {
         message: "Code is not Correct",
+      });
+    }
+  };
+
+  const handle_resend_otp = () => {
+    if (phone && type) {
+      const payload: resendOtpPayload = { type: type, phone: phone };
+      resend_otp.mutate(payload, {
+        onSuccess: (data) => {
+          toast.success(data.message);
+          setOtpTimeInvalid(60);
+        },
+        onError: (error) => {
+          console.error(error.response);
+          toast.error(error.response?.data?.message);
+        },
       });
     }
   };
@@ -156,8 +198,10 @@ function VerifyOTPForm(): ReactNode {
           <Button
             type="button"
             variant={"link"}
+            isLoading={resend_otp.isPending}
+            disabled={resend_otp.isPending}
             className="text-app-info text-sm"
-            onClick={() => setOtpTimeInvalid(60)}
+            onClick={() => handle_resend_otp()}
           >
             Resend
           </Button>
@@ -194,14 +238,15 @@ function VerifyOTPForm(): ReactNode {
           verify_login.isPending ||
           google_verify.isPending
         }
+        isLoading={
+          verify_register.isPending ||
+          verify_login.isPending ||
+          google_verify.isPending
+        }
         type="submit"
         className="w-full"
       >
-        {verify_register.isPending ||
-        verify_login.isPending ||
-        google_verify.isPending
-          ? "Loading..."
-          : "Verify"}
+        Verify
       </Button>
     </form>
   );
