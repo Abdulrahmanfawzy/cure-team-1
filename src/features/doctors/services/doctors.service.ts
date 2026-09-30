@@ -1,109 +1,75 @@
-import axios from 'axios'
+import axios from "axios";
 import type {
   Doctor,
   DoctorApiResponse,
   DoctorSearchFilters,
   DoctorsSearchResponse,
-} from '../types/doctor.types'
-import { apiClient } from '@/services/axios/client'
+} from "../types/doctor.types";
+import { apiClient } from "@/services/axios/client";
 
-const buildSearchParams = (
-  filters: DoctorSearchFilters,
-): URLSearchParams => {
-  const params = new URLSearchParams()
+const buildSearchParams = (filters: DoctorSearchFilters): URLSearchParams => {
+  const params = new URLSearchParams();
 
   if (filters.search.trim()) {
-    params.set(
-      'search',
-      filters.search.trim(),
-    )
+    params.set("search", filters.search.trim());
   }
 
   if (filters.major) {
-    params.set('major', filters.major)
+    params.set("major", filters.major);
   }
 
   if (filters.gender) {
-    params.set('gender', filters.gender)
+    params.set("gender", filters.gender);
   }
 
   if (filters.consultationType) {
-    params.set(
-      'consultation_type',
-      filters.consultationType,
-    )
+    params.set("consultation_type", filters.consultationType);
   }
 
   if (filters.availableDate) {
-    params.set(
-      'available_data',
-      filters.availableDate,
-    )
+    params.set("available_data", filters.availableDate);
   }
 
   if (filters.sort) {
-    params.set('sort', filters.sort)
+    params.set("sort", filters.sort);
   }
 
-  params.set('page', String(filters.page))
+  params.set("page", String(filters.page));
 
-  return params
-}
+  return params;
+};
 
-const getImageUrl = (
-  imagePath: string,
-): string => {
+const getImageUrl = (imagePath: string): string => {
   if (/^https?:\/\//i.test(imagePath)) {
-    return imagePath
+    return imagePath;
   }
 
-  const baseUrl =
-    apiClient.defaults.baseURL ?? ''
+  const baseUrl = apiClient.defaults.baseURL ?? "";
 
-  const origin = baseUrl
-    .replace(/\/api\/?$/, '')
-    .replace(/\/$/, '')
+  const origin = baseUrl.replace(/\/api\/?$/, "").replace(/\/$/, "");
 
-  return `${origin}/${imagePath.replace(
-    /^\//,
-    '',
-  )}`
-}
+  return `${origin}/${imagePath.replace(/^\//, "")}`;
+};
 
-const getAvailableTime = (
-  doctor: DoctorApiResponse,
-): string => {
+const getAvailableTime = (doctor: DoctorApiResponse): string => {
   const slot = doctor.available_slots
-    .flatMap(
-      (availability) =>
-        availability.slots,
-    )
-    .find(
-      (availabilitySlot) =>
-        !availabilitySlot.is_booked,
-    )
+    .flatMap((availability) => availability.slots)
+    .find((availabilitySlot) => !availabilitySlot.is_booked);
 
   if (!slot) {
-    return 'Unavailable'
+    return "Unavailable";
   }
 
-  return `${slot.start_time} - ${slot.end_time}`
-}
+  return `${slot.start_time} - ${slot.end_time}`;
+};
 
-const getDateString = (
-  date: Date,
-): string => {
+const getDateString = (date: Date): string => {
   return [
     date.getFullYear(),
-    String(
-      date.getMonth() + 1,
-    ).padStart(2, '0'),
-    String(date.getDate()).padStart(
-      2,
-      '0',
-    ),
-  ].join('-')
-}
+    String(date.getMonth() + 1).padStart(2, "0"),
+    String(date.getDate()).padStart(2, "0"),
+  ].join("-");
+};
 
 const hasAvailableSlotOnDate = (
   doctor: DoctorApiResponse,
@@ -112,108 +78,73 @@ const hasAvailableSlotOnDate = (
   return doctor.available_slots.some(
     (availability) =>
       availability.date === date &&
-      availability.slots.some(
-        (slot) => !slot.is_booked,
-      ),
-  )
-}
+      availability.slots.some((slot) => !slot.is_booked),
+  );
+};
 
-const mapDoctor = (
-  doctor: DoctorApiResponse,
-): Doctor => {
-  const today = getDateString(
-    new Date(),
-  )
+const mapDoctor = (doctor: DoctorApiResponse): Doctor => {
+  const today = getDateString(new Date());
 
-  const tomorrowDate = new Date()
+  const tomorrowDate = new Date();
 
-  tomorrowDate.setDate(
-    tomorrowDate.getDate() + 1,
-  )
+  tomorrowDate.setDate(tomorrowDate.getDate() + 1);
 
-  const tomorrow =
-    getDateString(tomorrowDate)
+  const tomorrow = getDateString(tomorrowDate);
 
   return {
     id: doctor.id,
     name: doctor.name,
 
-    specialty:
-      doctor.specialist.name,
+    specialty: doctor.specialist.name,
 
-    hospital:
-      doctor.hospital.trim(),
+    hospital: doctor.hospital.trim(),
 
-    rating: Number(
-      doctor.rating_avg,
-    ),
+    rating: Number(doctor.rating_avg),
 
-    availableTime:
-      getAvailableTime(doctor),
+    availableTime: getAvailableTime(doctor),
 
-    price: Number(
-      doctor.consultation_price,
-    ),
+    price: Number(doctor.consultation_price),
 
     gender: doctor.gender,
 
-    consultationTypes: [
-      doctor.consultation_type,
-    ],
+    consultationTypes: [doctor.consultation_type],
 
-    availableToday:
-      hasAvailableSlotOnDate(
-        doctor,
-        today,
-      ),
+    availableToday: hasAvailableSlotOnDate(doctor, today),
 
-    availableTomorrow:
-      hasAvailableSlotOnDate(
-        doctor,
-        tomorrow,
-      ),
+    availableTomorrow: hasAvailableSlotOnDate(doctor, tomorrow),
 
-    image: getImageUrl(
-      doctor.profile_image,
-    ),
+    image: getImageUrl(doctor.profile_image),
 
     latitude: doctor.latitude,
     longitude: doctor.longitude,
-  }
-}
+  };
+};
 
 export interface DoctorsQueryResult {
-  doctors: Doctor[]
-  pagination: DoctorsSearchResponse['pagination']
-  message: string
+  doctors: Doctor[];
+  pagination: DoctorsSearchResponse["pagination"];
+  message: string;
 }
 
 export const searchDoctors = async (
   filters: DoctorSearchFilters,
 ): Promise<DoctorsQueryResult> => {
   try {
-    const { data } =
-      await apiClient.get<DoctorsSearchResponse>(
-        '/search',
-        {
-          params:
-            buildSearchParams(filters),
-        },
-      )
+    const { data } = await apiClient.get<DoctorsSearchResponse>("/search", {
+      params: buildSearchParams(filters),
+    });
 
     return {
-      doctors:
-        data.data.map(mapDoctor),
+      doctors: data.data.map(mapDoctor),
 
-      pagination:
-        data.pagination,
+      pagination: data.pagination,
 
       message: data.message,
-    }
+    };
   } catch (error) {
     if (
       axios.isAxiosError<{
-        message?: string
+        message?: string;
       }>(error) &&
       error.response?.status === 404
     ) {
@@ -221,8 +152,7 @@ export const searchDoctors = async (
         doctors: [],
 
         pagination: {
-          current_page:
-            filters.page,
+          current_page: filters.page,
 
           per_page: 10,
 
@@ -236,12 +166,11 @@ export const searchDoctors = async (
         },
 
         message:
-          error.response.data
-            ?.message ??
+          error.response.data?.message ??
           "We couldn't find what you're looking for.",
-      }
+      };
     }
 
-    throw error
+    throw error;
   }
-}
+};
