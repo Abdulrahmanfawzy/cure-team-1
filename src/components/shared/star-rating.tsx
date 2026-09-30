@@ -12,15 +12,23 @@ export function StarRating({
       className="flex items-center gap-0.5"
       aria-label={`${rating} out of ${count} stars`}
     >
-      {Array.from({ length: count }).map((_, index) => (
-        <span
-          key={index}
-          className="text-app-gold"
-          aria-hidden="true"
-        >
-          ★
-        </span>
-      ))}
+      {Array.from({ length: count }).map((_, index) => {
+        const isFilled = index < Math.round(rating);
+
+        return (
+          <span
+            key={index}
+            className={
+              isFilled
+                ? "text-app-gold"
+                : "text-gray-300"
+            }
+            aria-hidden="true"
+          >
+            ★
+          </span>
+        );
+      })}
     </div>
   );
 }

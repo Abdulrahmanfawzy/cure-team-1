@@ -1,8 +1,57 @@
-import { Clock3, Star } from "lucide-react";
+import { Clock3 } from "lucide-react";
 import { Link } from "react-router-dom";
-import { doctors } from "../constants/home-data";
+
+import { StarRating } from "@/components/shared";
+import { getImageUrl } from "@/utils/image-url";
+
+import { useTopRatedDoctors } from "../hooks/use-home";
 
 export function DoctorsSection() {
+  const {
+    data: doctors = [],
+    isLoading,
+    isError,
+  } = useTopRatedDoctors();
+
+  if (isLoading) {
+    return (
+      <section className="pb-20 md:pb-24">
+        <div className="main_container">
+          <div className="mb-6">
+            <div className="h-8 w-72 animate-pulse rounded bg-app-neutral-lightest" />
+            <div className="mt-3 h-4 w-96 max-w-full animate-pulse rounded bg-app-neutral-lightest" />
+          </div>
+
+          <div className="flex gap-4 overflow-hidden">
+            {Array.from({ length: 3 }).map((_, index) => (
+              <div
+                key={index}
+                className="min-w-70 animate-pulse rounded-xl border border-app-neutral-lightest bg-white p-3 md:min-w-62.5"
+              >
+                <div className="flex gap-3">
+                  <div className="size-12 rounded-lg bg-app-neutral-lightest" />
+
+                  <div className="flex-1">
+                    <div className="h-3 w-24 rounded bg-app-neutral-lightest" />
+                    <div className="mt-2 h-3 w-32 rounded bg-app-neutral-lightest" />
+                    <div className="mt-2 h-3 w-20 rounded bg-app-neutral-lightest" />
+                  </div>
+                </div>
+
+                <div className="mt-4 h-3 w-20 rounded bg-app-neutral-lightest" />
+                <div className="mt-3 h-8 rounded bg-app-neutral-lightest" />
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (isError || doctors.length === 0) {
+    return null;
+  }
+
   return (
     <section className="pb-20 md:pb-24">
       <div className="main_container">
@@ -25,6 +74,8 @@ export function DoctorsSection() {
               border border-app-primary
               px-5 py-2 text-[10px]
               text-app-primary
+              transition-colors
+              hover:bg-app-primary hover:text-white
               sm:block
             "
           >
@@ -32,10 +83,99 @@ export function DoctorsSection() {
           </Link>
         </div>
 
-        <div className="flex gap-4 overflow-x-auto pb-3">
-          {doctors.map((doctor) => (
-            <DoctorCard key={doctor.id} doctor={doctor} />
-          ))}
+        <div className="flex gap-4 overflow-x-auto pb-3 scrollbar-none">
+          {doctors.map((doctor) => {
+            const rating = Number(doctor.rating_avg) || 0;
+
+            const availableSlot = doctor.availabilities?.find(
+              (slot) => !slot.is_booked,
+            );
+
+            const availability = availableSlot
+              ? `${availableSlot.start_time} - ${availableSlot.end_time}`
+              : "No availability";
+
+            return (
+              <article
+                key={doctor.id}
+                className="
+                  min-w-70 flex-1
+                  rounded-xl border border-app-neutral-lightest
+                  bg-white p-2
+                  shadow-sm
+                  md:min-w-62.5
+                "
+              >
+                <div className="flex gap-3">
+                  <img
+                    src={getImageUrl(doctor.profile_image)}
+                    alt={doctor.name}
+                    className="size-12 rounded-lg object-cover"
+                    onError={(event) => {
+                      event.currentTarget.src = "/images/avatar.png";
+                    }}
+                  />
+
+                  <div className="min-w-0 flex-1">
+                    <h3 className="truncate text-[11px] font-medium text-app-secondary">
+                      {doctor.name}
+                    </h3>
+
+                    <p className="truncate text-[11px] text-app-neutral-darker">
+                      {doctor.specialist?.name || "Specialist"}
+                      {doctor.hospital
+                        ? ` | ${doctor.hospital}`
+                        : ""}
+                    </p>
+
+                    <div className="mt-1 flex items-center gap-1 text-[8px]">
+                      <StarRating
+                        rating={rating}
+                        count={1}
+                      />
+
+                      <span className="ml-1">
+                        {rating.toFixed(1)}
+                      </span>
+
+                      <Clock3
+                        size={9}
+                        className="ml-1 text-app-neutral"
+                      />
+
+                      <span className="truncate">
+                        {availability}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-3 flex items-center justify-between">
+                  <span className="text-[10px] text-app-neutral-darker">
+                    Consultation
+                  </span>
+
+                  <span className="text-[10px] font-medium text-app-error">
+                    {doctor.consultation_price}
+                  </span>
+                </div>
+
+                <Link
+                  to={`/appointment?doctorId=${doctor.id}`}
+                  className="
+                    mt-2 flex h-8
+                    items-center justify-center
+                    rounded-md bg-app-primary
+                    text-[10px] font-medium text-white
+                    transition-colors
+                    hover:bg-app-primary-lighter
+                  "
+                >
+                  Book appointment
+                </Link>
+              </article>
+            );
+          })}
         </div>
 
         <div className="mt-5 flex justify-center sm:hidden">
@@ -52,67 +192,5 @@ export function DoctorsSection() {
         </div>
       </div>
     </section>
-  );
-}
-
-function DoctorCard({ doctor }: { doctor: (typeof doctors)[number] }) {
-  return (
-    <article
-      className="
-        min-w-70 flex-1
-        rounded-xl border border-app-neutral-lightest
-        bg-white p-2
-        shadow-sm
-        md:min-w-62.5
-      "
-    >
-      <div className="flex gap-3">
-        <img
-          src={doctor.image}
-          alt={doctor.name}
-          className="size-12 rounded-lg object-cover"
-        />
-
-        <div className="min-w-0 flex-1">
-          <h3 className="truncate text-[11px] font-medium text-app-secondary">
-            {doctor.name}
-          </h3>
-
-          <p className="truncate text-[11px] text-app-neutral-darker">
-            {doctor.specialty} | {doctor.hospital}
-          </p>
-
-          <div className="mt-1 flex items-center gap-1 text-[8px]">
-            <Star size={10} className="fill-app-gold text-app-gold" />
-            <span>{doctor.rating}</span>
-
-            <Clock3 size={9} className="ml-1 text-app-neutral" />
-
-            <span>{doctor.availability}</span>
-          </div>
-        </div>
-      </div>
-
-      <div className="mt-3 flex items-center justify-between">
-        <span className="text-[10px] text-app-neutral-darker">Price/hour</span>
-
-        <span className="text-[10px] font-medium text-app-error">
-          {doctor.price}
-        </span>
-      </div>
-
-      <Link
-        to={`/doctors/${doctor.id}/appointment`}
-        className="
-          mt-2 flex h-8
-          items-center justify-center
-          rounded-md bg-app-primary
-          text-[10px] font-medium text-white
-          transition-colors hover:bg-app-primary-lighter
-        "
-      >
-        Book appointment
-      </Link>
-    </article>
   );
 }

@@ -1,15 +1,17 @@
-import axios from "axios";
-import type { ContactFormData, ContactResponse } from "../types/contact-types";
+import { apiClient } from "@/services/axios/client";
 
-const API_URL = import.meta.env.VITE_API_URL;
+import type {
+  ContactFormData,
+  ContactResponse,
+} from "../types/contact-types";
 
-export const sendContactMessage = async (
-  data: ContactFormData
-): Promise<ContactResponse> => {
-  const response = await axios.post<ContactResponse>(
-    `${API_URL}/contact`,
-    data
+export async function sendContactMessage(
+  data: ContactFormData,
+): Promise<ContactResponse> {
+  const response = await apiClient.post<ContactResponse>(
+    "/contact",
+    data,
   );
 
   return response.data;
-};
+}
