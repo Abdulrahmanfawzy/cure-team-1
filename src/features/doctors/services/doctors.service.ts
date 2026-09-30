@@ -1,11 +1,11 @@
 import axios from 'axios'
-import { apiClient } from '@/services/axios'
 import type {
   Doctor,
   DoctorApiResponse,
   DoctorSearchFilters,
   DoctorsSearchResponse,
 } from '../types/doctor.types'
+import { apiClient } from '@/services/axios/client'
 
 const buildSearchParams = (
   filters: DoctorSearchFilters,
@@ -143,7 +143,7 @@ export const searchDoctors = async (
       message: data.message,
     }
   } catch (error) {
-   
+
     if (
       axios.isAxiosError<{ message?: string }>(error) &&
       error.response?.status === 404
