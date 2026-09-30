@@ -8,25 +8,29 @@ import { FormInput } from "@/components/shared/common/form-inputs/FormInput";
 import { useGoogleAuth } from "../../hooks/auth-hooks";
 import { PATHS } from "@/app/router";
 import { toast } from "sonner";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { Navigate, useNavigate, useSearchParams } from "react-router-dom";
 
 function GoogleRegisterForm(): ReactNode {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  const temp_token = searchParams.get("temp_token") ?? "";
+
+  if (!temp_token) {
+    return <Navigate to={PATHS.login} replace={true} />;
+  }
 
   const { control, handleSubmit, reset } = useForm<googleRegisterPayload>({
     defaultValues: {
       phone: "",
-      temp_token: searchParams.get("temp_token") ?? "",
+      temp_token: temp_token,
     },
     resolver: zodResolver(googleRegisterSchema),
   });
 
   const { google_register } = useGoogleAuth();
 
-  const submitLoginForm = (formData: googleRegisterPayload) => {
-    console.log("payload", formData);
-
+  // Submit Form
+  const submitRegisterForm = (formData: googleRegisterPayload) => {
     google_register.mutate(formData, {
       onSuccess: (data) => {
         toast.success(data.message);
@@ -36,14 +40,14 @@ function GoogleRegisterForm(): ReactNode {
         reset();
       },
       onError: (error) => {
-        console.log(error.response);
+        console.error(error.response);
         toast.error(error.response?.data?.message);
       },
     });
   };
 
   return (
-    <form onSubmit={handleSubmit(submitLoginForm)} className="space-y-4">
+    <form onSubmit={handleSubmit(submitRegisterForm)} className="space-y-4">
       {/* Phone */}
       <FormInput
         control={control}

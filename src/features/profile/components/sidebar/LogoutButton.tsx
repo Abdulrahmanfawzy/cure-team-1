@@ -21,7 +21,7 @@ function LogoutButton() {
     };
 
     if (refresh_token === undefined) return;
-    console.log("logout comp", refresh_token);
+
     logout.mutate(refresh_token, {
       onSuccess: (data) => {
         navigate(PATHS.login, { replace: true });
@@ -30,7 +30,7 @@ function LogoutButton() {
         dispatch(setAuthenticated(false));
       },
       onError: (error) => {
-        console.log(error.response);
+        console.error(error.response);
         toast.error(error.response?.data?.message);
       },
     });

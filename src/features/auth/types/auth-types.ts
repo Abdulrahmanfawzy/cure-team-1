@@ -40,3 +40,7 @@ export type resendOtpPayload = {
 export type resendOtpResponse = {
   resend_available_at: string;
 };
+
+export type refreshTokenPayload = {
+  refresh_token: string;
+};

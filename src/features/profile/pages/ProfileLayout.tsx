@@ -27,7 +27,7 @@ function ProfileLayout() {
           toast.success(data.message);
         },
         onError: (error) => {
-          console.log(error?.response);
+          console.error(error?.response);
           toast.error(error?.response?.data?.message);
         },
       });

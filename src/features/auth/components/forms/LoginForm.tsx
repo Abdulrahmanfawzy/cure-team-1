@@ -30,7 +30,7 @@ function LoginForm(): ReactNode {
         reset();
       },
       onError: (error) => {
-        console.log(error.response);
+        console.error(error.response);
         toast.error(error.response?.data?.message);
       },
     });

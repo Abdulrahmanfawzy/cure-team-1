@@ -39,7 +39,7 @@ export const useAuth = () => {
   });
 
   const verify_register = useMutation<
-    ApiResponse<[]>,
+    ApiResponse<VerifyLoginResponse>,
     AxiosErrorResponse,
     verifyOtpPayload
   >({

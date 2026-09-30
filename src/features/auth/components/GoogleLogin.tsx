@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { useGoogleLogin, type TokenResponse } from "@react-oauth/google";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-
 import { useGoogleAuth } from "../hooks/auth-hooks";
 import type { googleLoginPayload } from "../types/auth-types";
 import { setAuthenticated } from "../slices/auth-slice";
@@ -43,32 +42,20 @@ function GoogleLogin({ mode }: GoogleLoginProps) {
   const navigate = useNavigate();
 
   const { google_login: loginWithGoogle } = useGoogleAuth();
+  // 1. useGoogleLogin From react-oauth
+  const login = useGoogleLogin({
+    onSuccess: (tokenResponse) => {
+      console.log("res from google login", tokenResponse);
 
-  // Success login handle
-  const handleGoogleSuccess = (data: typeof loginWithGoogle.data) => {
-    if (!data) return;
-    // New user
-    if ("temp_token" in data.data) {
-      navigate(
-        `${PATHS.GoogleCompleteRegister}?temp_token=${encodeURIComponent(
-          data.data.temp_token,
-        )}`,
-        { replace: true },
-      );
-      toast.success(
-        "Please enter your phone number to complete your registration.",
-      );
-      return;
-    }
+      handleGoogleLogin(tokenResponse);
+    },
+    onError: (error) => {
+      console.error("Google OAuth error:", error);
+      toast.error("Google login failed. Please try again.");
+    },
+  });
 
-    // Existing Google user
-    authStorage.setTokens(data.data.access_token, data.data.raw_refresh_token);
-    dispatch(setAuthenticated(true));
-    toast.success(data.message);
-    navigate(PATHS.home, { replace: true });
-  };
-
-  // mutate
+  // 2. mutate login request
   const handleGoogleLogin = (tokenResponse: TokenResponse) => {
     const payload: googleLoginPayload = {
       token: tokenResponse.access_token,
@@ -76,7 +63,31 @@ function GoogleLogin({ mode }: GoogleLoginProps) {
 
     loginWithGoogle.mutate(payload, {
       onSuccess: (data) => {
-        handleGoogleSuccess(data);
+        // New user
+        if ("temp_token" in data.data) {
+          navigate(
+            `${PATHS.GoogleCompleteRegister}?temp_token=${encodeURIComponent(
+              data.data.temp_token,
+            )}`,
+            { replace: true },
+          );
+          toast.success(
+            "Please enter your phone number to complete your registration.",
+          );
+          return;
+        }
+
+        // Existing Google user
+
+        authStorage.setTokens(
+          data.data.access_token,
+          data.data.raw_refresh_token,
+          data.data.refresh_token_expires_at,
+          data.data.access_token_expires_at,
+        );
+        dispatch(setAuthenticated(true));
+        toast.success(data.message);
+        navigate(PATHS.home, { replace: true });
       },
 
       onError: (error) => {
@@ -86,28 +97,13 @@ function GoogleLogin({ mode }: GoogleLoginProps) {
     });
   };
 
-  //useGoogleLogin From react-oauth
-  const login = useGoogleLogin({
-    onSuccess: (tokenResponse) => {
-      console.log("google res", tokenResponse);
-      handleGoogleLogin(tokenResponse);
-    },
-
-    onError: (error) => {
-      console.error("Google OAuth error:", error);
-      toast.error("Google login failed. Please try again.");
-    },
-  });
-
-  const isLoading = loginWithGoogle.isPending;
-
   return (
     <Button
       type="button"
       variant="secondary"
       size="lg"
-      disabled={isLoading}
-      isLoading={isLoading}
+      disabled={loginWithGoogle.isPending}
+      isLoading={loginWithGoogle.isPending}
       onClick={() => login()}
       className="flex w-full items-center justify-center gap-1 bg-transparent!"
     >
