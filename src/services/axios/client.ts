@@ -2,10 +2,15 @@ import { refreshToken } from "@/features/auth/api/auth-api";
 import type { refreshTokenPayload } from "@/features/auth/types/auth-types";
 import { authStorage } from "@/features/auth/utils/auth-storage";
 import axios from "axios";
+import { authStorage } from "@/features/auth/utils/auth-storage";
 
 export const apiClient = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
   timeout: 15_000,
+  headers: {
+    Accept: "application/json",
+    "Content-Type": "application/json",
+  },
 });
 export const refreshTokenApiClient = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
@@ -40,7 +45,8 @@ apiClient.interceptors.request.use(async (config) => {
   }
 
   if (token) {
-    config.headers.Authorization = `bearer ${token}`;
+    config.headers.Authorization = `Bearer ${token}`;
   }
+
   return config;
 });

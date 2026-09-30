@@ -12,5 +12,5 @@
 
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
-
-export { Input, Label };
+import { StarRating } from "../shared/star-rating";
+export { Input, Label, StarRating };
