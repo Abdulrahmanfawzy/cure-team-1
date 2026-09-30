@@ -6,6 +6,8 @@ import {
 
 import {
   getNotifications,
+  getUnreadNotifications,
+  markAllNotificationsAsRead,
   markNotificationAsRead,
 } from "../api/notifications-api";
 
@@ -13,7 +15,13 @@ export function useNotifications() {
   return useQuery({
     queryKey: ["notifications"],
     queryFn: getNotifications,
-    refetchInterval: 30000,
+  });
+}
+
+export function useUnreadNotifications() {
+  return useQuery({
+    queryKey: ["notifications", "unread"],
+    queryFn: getUnreadNotifications,
   });
 }
 
@@ -26,6 +34,28 @@ export function useMarkNotificationAsRead() {
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ["notifications"],
+      });
+
+      queryClient.invalidateQueries({
+        queryKey: ["notifications", "unread"],
+      });
+    },
+  });
+}
+
+export function useMarkAllNotificationsAsRead() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: markAllNotificationsAsRead,
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["notifications"],
+      });
+
+      queryClient.invalidateQueries({
+        queryKey: ["notifications", "unread"],
       });
     },
   });

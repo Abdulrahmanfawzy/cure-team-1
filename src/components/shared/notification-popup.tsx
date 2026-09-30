@@ -3,7 +3,6 @@ import {
   CalendarCheck,
   CalendarClock,
   CalendarX,
-  Check,
   X,
 } from "lucide-react";
 
@@ -12,29 +11,34 @@ import type { Notification } from "@/features/notifications/types/notification-t
 interface NotificationPopupProps {
   notifications: Notification[];
   onClose: () => void;
-  onNotificationClick: (notification: Notification) => void;
+  onNotificationClick: (
+    notification: Notification,
+  ) => void;
 }
 
 function getNotificationIcon(notification: Notification) {
   const type = notification.type?.toLowerCase() ?? "";
+  const title =
+    notification.data?.title?.toLowerCase() ?? "";
 
   if (
     type.includes("cancel") ||
-    notification.title.toLowerCase().includes("cancel")
+    title.includes("cancel")
   ) {
     return CalendarX;
   }
 
   if (
     type.includes("complete") ||
-    notification.title.toLowerCase().includes("complete")
+    title.includes("complete")
   ) {
     return CalendarCheck;
   }
 
   if (
     type.includes("appointment") ||
-    notification.title.toLowerCase().includes("appointment")
+    title.includes("appointment") ||
+    type.includes("booking")
   ) {
     return CalendarClock;
   }
@@ -44,7 +48,8 @@ function getNotificationIcon(notification: Notification) {
 
 function getNotificationStyle(notification: Notification) {
   const type = notification.type?.toLowerCase() ?? "";
-  const title = notification.title.toLowerCase();
+  const title =
+    notification.data?.title?.toLowerCase() ?? "";
 
   if (
     type.includes("cancel") ||
@@ -73,11 +78,24 @@ function getNotificationStyle(notification: Notification) {
 }
 
 function isUnread(notification: Notification) {
-  if (typeof notification.is_read === "boolean") {
-    return !notification.is_read;
+  return notification.read_at === null;
+}
+
+function formatNotificationDate(
+  createdAt: string,
+) {
+  const date = new Date(createdAt);
+
+  if (Number.isNaN(date.getTime())) {
+    return "";
   }
 
-  return notification.read_at == null;
+  return new Intl.DateTimeFormat("en", {
+    month: "short",
+    day: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+  }).format(date);
 }
 
 export function NotificationPopup({
@@ -111,17 +129,26 @@ export function NotificationPopup({
           </div>
         ) : (
           notifications.map((notification) => {
-            const Icon = getNotificationIcon(notification);
-            const style = getNotificationStyle(notification);
-            const unread = isUnread(notification);
+            const Icon =
+              getNotificationIcon(notification);
+
+            const style =
+              getNotificationStyle(notification);
+
+            const unread =
+              isUnread(notification);
 
             return (
               <button
                 key={notification.id}
                 type="button"
-                onClick={() => onNotificationClick(notification)}
+                onClick={() =>
+                  onNotificationClick(notification)
+                }
                 className={`relative flex w-full gap-4 px-6 py-5 text-left transition-colors hover:bg-app-neutral-lightest ${
-                  unread ? "bg-white" : "bg-app-neutral-lightest/40"
+                  unread
+                    ? "bg-white"
+                    : "bg-app-neutral-lightest/40"
                 }`}
               >
                 {/* Icon */}
@@ -139,18 +166,18 @@ export function NotificationPopup({
                 <div className="min-w-0 flex-1">
                   <div className="flex items-start justify-between gap-3">
                     <h3 className="font-serif text-lg leading-tight text-app-secondary">
-                      {notification.title}
+                      {notification.data.title}
                     </h3>
 
-                    {notification.created_at_human && (
-                      <span className="shrink-0 text-sm text-app-neutral">
-                        {notification.created_at_human}
-                      </span>
-                    )}
+                    <span className="shrink-0 text-sm text-app-neutral">
+                      {formatNotificationDate(
+                        notification.created_at,
+                      )}
+                    </span>
                   </div>
 
                   <p className="mt-1 line-clamp-2 text-sm leading-5 text-app-neutral-darker">
-                    {notification.message}
+                    {notification.data.message}
                   </p>
                 </div>
 
