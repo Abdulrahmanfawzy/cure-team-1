@@ -3,6 +3,7 @@ import { useDoctors } from '../hooks/doctors-hooks'
 
 import { DoctorFilters } from './DoctorFilters'
 import { DoctorList } from './DoctorList'
+import { DoctorMap } from './DoctorMap'
 import { DoctorSearchBar } from './DoctorSearchBar'
 import { SpecialtyFilters } from './SpecialtyFilters'
 
@@ -15,6 +16,7 @@ export function DoctorsPageView() {
     availableDate,
     sort,
     showFilters,
+    showMap,
 
     doctors,
 
@@ -27,6 +29,7 @@ export function DoctorsPageView() {
     canGoNext,
 
     setShowFilters,
+    setShowMap,
 
     handleSearchChange,
     handleSpecialtyChange,
@@ -49,7 +52,15 @@ export function DoctorsPageView() {
           showFilters={showFilters}
           onFilterToggle={() =>
             setShowFilters(
-              (previous) => !previous,
+              (previous) =>
+                !previous,
+            )
+          }
+          showMap={showMap}
+          onMapToggle={() =>
+            setShowMap(
+              (previous) =>
+                !previous,
             )
           }
         />
@@ -61,7 +72,9 @@ export function DoctorsPageView() {
               consultationType={
                 consultationType
               }
-              availableDate={availableDate}
+              availableDate={
+                availableDate
+              }
               sort={sort}
               onGenderChange={
                 handleGenderChange
@@ -89,12 +102,24 @@ export function DoctorsPageView() {
               }
             />
 
-            <div className="relative mt-8">
-              <DoctorList
-                doctors={doctors}
-                isLoading={isLoading}
-                emptyMessage={message}
-              />
+            <div className="relative">
+              {showMap ? (
+                <DoctorMap
+                  doctors={doctors}
+                />
+              ) : (
+                <div className="mt-8">
+                  <DoctorList
+                    doctors={doctors}
+                    isLoading={
+                      isLoading
+                    }
+                    emptyMessage={
+                      message
+                    }
+                  />
+                </div>
+              )}
 
               {isFetching &&
                 !isLoading && (
@@ -104,33 +129,35 @@ export function DoctorsPageView() {
                 )}
             </div>
 
-            <div className="mt-10 flex justify-between">
-              <button
-                type="button"
-                disabled={
-                  !canGoPrevious
-                }
-                onClick={
-                  handlePreviousPage
-                }
-                className="h-13 w-61.75 rounded-lg border border-app-primary text-app-primary transition-colors hover:bg-app-primary hover:text-white disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-white disabled:hover:text-app-primary"
-              >
-                Previous Page
-              </button>
+            {!showMap && (
+              <div className="mt-10 flex justify-between">
+                <button
+                  type="button"
+                  disabled={
+                    !canGoPrevious
+                  }
+                  onClick={
+                    handlePreviousPage
+                  }
+                  className="h-13 w-61.75 rounded-lg border border-app-primary text-app-primary transition-colors hover:bg-app-primary hover:text-white disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-white disabled:hover:text-app-primary"
+                >
+                  Previous Page
+                </button>
 
-              <button
-                type="button"
-                disabled={
-                  !canGoNext
-                }
-                onClick={
-                  handleNextPage
-                }
-                className="h-13 w-61.75 rounded-lg border border-app-primary text-app-primary transition-colors hover:bg-app-primary hover:text-white disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-white disabled:hover:text-app-primary"
-              >
-                Next Page
-              </button>
-            </div>
+                <button
+                  type="button"
+                  disabled={
+                    !canGoNext
+                  }
+                  onClick={
+                    handleNextPage
+                  }
+                  className="h-13 w-61.75 rounded-lg border border-app-primary text-app-primary transition-colors hover:bg-app-primary hover:text-white disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-white disabled:hover:text-app-primary"
+                >
+                  Next Page
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>

@@ -1,0 +1,49 @@
+.doctor-map-marker {
+  background: transparent;
+  border: 0;
+}
+
+.doctor-map-marker__pin {
+  position: relative;
+  width: 32px;
+  height: 40px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  filter: drop-shadow(
+    0 2px 3px rgb(0 0 0 / 0.25)
+  );
+}
+
+.doctor-map-marker__pin::before {
+  content: '';
+  width: 30px;
+  height: 30px;
+  border-radius: 50% 50% 50% 0;
+  background: var(--color-primary);
+  transform: rotate(-45deg);
+  position: absolute;
+  top: 0;
+  left: 1px;
+}
+
+.doctor-map-marker__pin span {
+  position: absolute;
+  top: 8px;
+  width: 10px;
+  height: 10px;
+  border-radius: 9999px;
+  background: white;
+  z-index: 1;
+}
+
+.doctor-map-tooltip.leaflet-tooltip {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.doctor-map-tooltip.leaflet-tooltip::before {
+  display: none;
+}
