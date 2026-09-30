@@ -1,13 +1,7 @@
 import { Card } from "@/components/ui/card";
 import { Star } from "lucide-react";
-type Review = {
-  id: number;
-  name: string;
-  date: string;
-  image: string;
-  rating: number;
-  comment: string;
-};
+import type { Review } from "../types/appointment.type";
+
 export default function ReviewCard({ review }: { review: Review }) {
   return (
     <Card
@@ -22,8 +16,8 @@ export default function ReviewCard({ review }: { review: Review }) {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <img
-            src={review.image}
-            alt={review.name}
+            src={review.patient.profile_image}
+            alt={review.patient.name}
             className="
               h-14
               w-14
@@ -33,9 +27,11 @@ export default function ReviewCard({ review }: { review: Review }) {
           />
 
           <div>
-            <h3 className="font-serif text-base ">{review.name}</h3>
+            <h3 className="font-serif text-base ">{review.patient.name}</h3>
 
-            <p className="text-[15px] text-[#737985]">{review.date}</p>
+            <p className="text-[15px] text-[#737985]">
+              {review.created_at_human}
+            </p>
           </div>
         </div>
 

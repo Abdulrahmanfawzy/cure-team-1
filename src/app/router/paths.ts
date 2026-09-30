@@ -28,6 +28,9 @@ export const PATHS = {
   // book
   appointment: "/appointment",
   book: "/book",
+  payment: "/payment/:bookingId",
+  successPayment: "/success-payment",
+  failPayment: "/fail-payment",
   chat: "/chat",
 } as const;
 
