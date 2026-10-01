@@ -23,6 +23,9 @@ import MainLayout from "./layouts/main-layout";
 import AuthGuard from "./layouts/auth-guard";
 import GoogleCompleteRegister from "@/features/auth/pages/GoogleCompleteRegister";
 import ChatPage from "@/features/chat/pages/ChatPage";
+import PaymentPage from "@/features/payment/pages/PaymentPage";
+import SuccessPaymentPage from "@/features/payment/pages/SuccessPaymentPage";
+import FailPaymentPage from "@/features/payment/pages/FailPaymentPage";
 
 const routes: RouteObject[] = [
   {
@@ -68,6 +71,21 @@ const routes: RouteObject[] = [
                 path: PATHS.book,
                 element: <BookPage />,
               },
+
+              {
+                path: PATHS.payment,
+                element: <PaymentPage />,
+              },
+
+              {
+                path: PATHS.successPayment,
+                element: <SuccessPaymentPage />,
+              },
+              {
+                path: PATHS.failPayment,
+                element: <FailPaymentPage />,
+              },
+
               {
                 path: PATHS.chat,
                 element: <ChatPage />,
