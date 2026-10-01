@@ -28,6 +28,7 @@ import { useDebounce } from "@/hooks/use-debounce";
 import { getImageUrl } from "@/utils/image-url";
 
 import { useProfile } from "@/features/profile/hooks/profile-hooks";
+import { useAppSelector } from "@/app/store/hooks";
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] =
@@ -48,6 +49,8 @@ export function Header() {
     useState(false);
 
   const navigate = useNavigate();
+
+  const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
 
   /*
    * Profile
@@ -398,102 +401,113 @@ export function Header() {
                 )}
               </button>
 
-              {/* Notifications */}
-              <div className="relative">
-                <button
-                  type="button"
-                  onClick={() =>
-                    setIsNotificationOpen(
-                      (prev) => !prev,
-                    )
-                  }
-                  aria-label="Notifications"
-                  aria-expanded={
-                    isNotificationOpen
-                  }
-                  className="
-                    relative flex size-9
-                    items-center justify-center
-                    rounded-md
-                    bg-app-neutral-lightest
-                    text-app-secondary
-                    transition-colors
-                    hover:bg-app-primary-lightest
-                  "
-                >
-                  <Bell size={15} />
+              {isAuthenticated ? (
+                <>
+                  {/* Notifications */}
+                  <div className="relative">
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setIsNotificationOpen(
+                          (prev) => !prev,
+                        )
+                      }
+                      aria-label="Notifications"
+                      aria-expanded={
+                        isNotificationOpen
+                      }
+                      className="
+                        relative flex size-9
+                        items-center justify-center
+                        rounded-md
+                        bg-app-neutral-lightest
+                        text-app-secondary
+                        transition-colors
+                        hover:bg-app-primary-lightest
+                      "
+                    >
+                      <Bell size={15} />
 
-                  {!isNotificationsLoading &&
-                    unreadCount > 0 && (
-                      <span
-                        className="
-                          absolute right-1 top-1
-                          size-2.5 rounded-full
-                          bg-green-500
-                          ring-2
-                          ring-app-neutral-lightest
-                        "
+                      {!isNotificationsLoading &&
+                        unreadCount > 0 && (
+                          <span
+                            className="
+                              absolute right-1 top-1
+                              size-2.5 rounded-full
+                              bg-green-500
+                              ring-2
+                              ring-app-neutral-lightest
+                            "
+                          />
+                        )}
+                    </button>
+
+                    {isNotificationOpen && (
+                      <NotificationPopup
+                        notifications={
+                          notifications
+                        }
+                        onClose={() =>
+                          setIsNotificationOpen(
+                            false,
+                          )
+                        }
+                        onNotificationClick={(
+                          notification,
+                        ) =>
+                          handleNotificationClick(
+                            notification.id,
+                          )
+                        }
                       />
                     )}
-                </button>
+                  </div>
 
-                {isNotificationOpen && (
-                  <NotificationPopup
-                    notifications={
-                      notifications
+                  {/* Profile */}
+                  <button
+                    type="button"
+                    onClick={
+                      handleProfileClick
                     }
-                    onClose={() =>
-                      setIsNotificationOpen(
-                        false,
-                      )
-                    }
-                    onNotificationClick={(
-                      notification,
-                    ) =>
-                      handleNotificationClick(
-                        notification.id,
-                      )
-                    }
-                  />
-                )}
-              </div>
-
-              {/* Profile */}
-              <button
-                type="button"
-                onClick={
-                  handleProfileClick
-                }
-                aria-label="Open profile"
-                className="
-                  size-9
-                  overflow-hidden
-                  rounded-full
-                  border-2 border-white
-                  bg-app-primary
-                  shadow-sm
-                "
-              >
-                <img
-                  src={
-                    profile?.data
-                      ?.profile_image
-                      ? getImageUrl(
-                          profile.data
-                            .profile_image,
-                        )
-                      : "/images/avatar.png"
-                  }
-                  alt={
-                    profile?.data?.name ||
-                    "Profile"
-                  }
-                  className="
-                    h-full w-full
-                    object-cover
-                  "
-                />
-              </button>
+                    aria-label="Open profile"
+                    className="
+                      size-9
+                      overflow-hidden
+                      rounded-full
+                      border-2 border-white
+                      bg-app-primary
+                      shadow-sm
+                    "
+                  >
+                    <img
+                      src={
+                        profile?.data
+                          ?.profile_image
+                          ? getImageUrl(
+                              profile.data
+                                .profile_image,
+                            )
+                          : "/images/avatar.png"
+                      }
+                      alt={
+                        profile?.data?.name ||
+                        "Profile"
+                      }
+                      className="
+                        h-full w-full
+                        object-cover
+                      "
+                    />
+                  </button>
+                </>
+              ) : (
+                <Link
+                  to="/login"
+                  className="rounded-lg bg-app-primary px-5 py-2 text-sm font-medium text-white transition-colors hover:bg-app-primary/90"
+                >
+                  Login
+                </Link>
+              )}
             </div>
           </div>
 
