@@ -28,7 +28,9 @@ function RegisterForm(): ReactNode {
     register.mutate(formData, {
       onSuccess: (data) => {
         toast.success(data.message);
-        navigate(`${PATHS.verifyOTP}?type=register&phone=${formData.phone}`);
+        navigate(
+          `${PATHS.verifyOTP}?type=register&phone=${encodeURIComponent(formData.phone)}`,
+        );
         reset();
       },
       onError: (error) => {
