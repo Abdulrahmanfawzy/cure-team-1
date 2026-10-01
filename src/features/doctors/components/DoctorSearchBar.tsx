@@ -1,11 +1,24 @@
-import { ChevronLeft, Map, Search, SlidersHorizontal } from "lucide-react";
-import { Input } from "@/components/ui/input";
+import {
+  ChevronLeft,
+  List,
+  Map,
+  Search,
+  SlidersHorizontal,
+} from 'lucide-react'
+
+import { Input } from '@/components/ui/input'
 
 interface DoctorSearchBarProps {
-  search: string;
-  onSearchChange: (value: string) => void;
-  showFilters: boolean;
-  onFilterToggle: () => void;
+  search: string
+  onSearchChange: (
+    value: string,
+  ) => void
+
+  showFilters: boolean
+  onFilterToggle: () => void
+
+  showMap: boolean
+  onMapToggle: () => void
 }
 
 export function DoctorSearchBar({
@@ -13,31 +26,42 @@ export function DoctorSearchBar({
   onSearchChange,
   showFilters,
   onFilterToggle,
+  showMap,
+  onMapToggle,
 }: DoctorSearchBarProps) {
   return (
-    <div className=" flex gap-6">
+    <div className="flex gap-6">
       <button
         type="button"
         onClick={onFilterToggle}
         className={[
-          "flex h-13 w-39 shrink-0 items-center justify-between overflow-hidden rounded-[10px] border bg-white transition-colors",
+          'flex h-13 w-39 shrink-0 items-center justify-between overflow-hidden rounded-[10px] border bg-white transition-colors',
+
           showFilters
-            ? "border-app-primary text-app-primary"
-            : "border-app-neutral-lighter text-app-neutral-darker",
-        ].join(" ")}
+            ? 'border-app-primary text-app-primary'
+            : 'border-app-neutral-lighter text-app-neutral-darker',
+        ].join(' ')}
       >
         <span className="flex items-center gap-3 px-4">
-          <SlidersHorizontal size={18} />
+          <SlidersHorizontal
+            size={18}
+          />
+
           Filter
         </span>
 
         <span className="flex h-full w-9.5 items-center justify-center border-l border-inherit">
           <ChevronLeft
             size={18}
-            className={showFilters ? "rotate-90" : "-rotate-90"}
+            className={
+              showFilters
+                ? 'rotate-90'
+                : '-rotate-90'
+            }
           />
         </span>
       </button>
+
       <div className="relative flex-1">
         <Search
           size={18}
@@ -46,7 +70,11 @@ export function DoctorSearchBar({
 
         <Input
           value={search}
-          onChange={(event) => onSearchChange(event.target.value)}
+          onChange={(event) =>
+            onSearchChange(
+              event.target.value,
+            )
+          }
           placeholder="Search doctors"
           className="h-13 rounded-[10px] pl-11 text-sm"
         />
@@ -54,11 +82,24 @@ export function DoctorSearchBar({
 
       <button
         type="button"
-        className="flex h-13 w-29 items-center justify-center gap-3 rounded-[10px] border border-app-neutral-lighter text-app-neutral-darker"
+        onClick={onMapToggle}
+        aria-pressed={showMap}
+        className={[
+          'flex h-13 w-29 shrink-0 items-center justify-center gap-3 rounded-[10px] border transition-colors',
+
+          showMap
+            ? 'border-app-primary bg-app-primary text-white'
+            : 'border-app-neutral-lighter text-app-neutral-darker',
+        ].join(' ')}
       >
-        <Map size={18} />
-        Map
+        {showMap ? (
+          <List size={18} />
+        ) : (
+          <Map size={18} />
+        )}
+
+        {showMap ? 'List' : 'Map'}
       </button>
     </div>
-  );
+  )
 }

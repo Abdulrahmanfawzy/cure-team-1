@@ -1,20 +1,28 @@
 export type Gender = 'male' | 'female'
 
-export type ConsultationType = 'In-clinic' | 'Home-Visit'
+export type ConsultationType =
+  | 'In-clinic'
+  | 'Home-Visit'
 
-export type AvailabilityDate = 'today' | 'tomorrow'
+export type AvailabilityDate =
+  | 'today'
+  | 'tomorrow'
 
 export type DoctorSort =
   | 'most_recommended'
   | 'price_low_to_high'
   | 'price_high_to_low'
 
-export interface DoctorAvailability {
+export interface DoctorSlot {
   id: string
-  date: string
   start_time: string
   end_time: string
   is_booked: boolean
+}
+
+export interface DoctorAvailability {
+  date: string
+  slots: DoctorSlot[]
 }
 
 export interface DoctorSpecialist {
@@ -33,7 +41,7 @@ export interface DoctorApiResponse {
   rating_avg: string
   rating_count: number
   profile_image: string
-  availabilities: DoctorAvailability[]
+  available_slots: DoctorAvailability[]
   latitude: number
   gender: Gender
   longitude: number
@@ -71,6 +79,9 @@ export interface Doctor {
   availableToday: boolean
   availableTomorrow: boolean
   image: string
+
+  latitude: number
+  longitude: number
 }
 
 export interface Specialty {
