@@ -2,18 +2,18 @@ import { Bell, HeartPulse, Menu, Search, X } from "lucide-react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-import { useDoctorSearch } from "@/features/search/hooks/use-search";
+import { useAppSelector } from "@/app/store/hooks";
 import { useProfile } from "@/features/profile/hooks/profile-hooks";
 import {
   useMarkNotificationAsRead,
   useNotifications,
 } from "@/features/notifications/hooks/use-notifications";
+import { useDoctorSearch } from "@/features/search/hooks/use-search";
 import { useDebounce } from "@/hooks/use-debounce";
 import { getImageUrl } from "@/utils/image-url";
 
 import { NotificationPopup } from "./notification-popup";
 import { ProfileMobilePopup } from "./profile-menu";
-import { useAppSelector } from "@/app/store/hooks";
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -24,8 +24,12 @@ export function Header() {
 
   const navigate = useNavigate();
 
+  const isAuthenticated = useAppSelector(
+    (state) => state.auth.isAuthenticated,
+  );
+
   const { data: profile } = useProfile();
-  const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
+
   const debouncedSearch = useDebounce(searchValue, 400);
   const { data: searchResults, isFetching: isSearchLoading } =
     useDoctorSearch(debouncedSearch);
@@ -44,6 +48,7 @@ export function Header() {
       setIsProfileOpen(true);
       return;
     }
+
     navigate("/profile");
   };
 
@@ -88,6 +93,7 @@ export function Header() {
                   size={14}
                   className="absolute left-3 top-1/2 -translate-y-1/2 text-app-neutral"
                 />
+
                 <input
                   type="search"
                   value={searchValue}
@@ -140,6 +146,7 @@ export function Header() {
                             <p className="truncate text-xs font-medium text-app-secondary">
                               {doctor.name}
                             </p>
+
                             <p className="mt-0.5 truncate text-[9px] text-app-neutral-darker">
                               {doctor.specialist?.name}
                             </p>
@@ -171,6 +178,7 @@ export function Header() {
 
             {/* Right Actions */}
             <div className="flex items-center gap-2">
+              {/* Menu */}
               <button
                 type="button"
                 onClick={() => setIsMenuOpen((prev) => !prev)}
@@ -181,48 +189,6 @@ export function Header() {
                 {isMenuOpen ? <X size={17} /> : <Menu size={17} />}
               </button>
 
-              {/* Notifications */}
-              <div className="relative">
-                <button
-                  type="button"
-                  onClick={() => setIsNotificationOpen((prev) => !prev)}
-                  aria-label="Notifications"
-                  aria-expanded={isNotificationOpen}
-                  className="relative flex size-9 items-center justify-center rounded-md bg-app-neutral-lightest text-app-secondary transition-colors hover:bg-app-primary-lightest"
-                >
-                  <Bell size={15} />
-
-                  {!isNotificationsLoading && unreadCount > 0 && (
-                    <span className="absolute right-1 top-1 size-2.5 rounded-full bg-green-500 ring-2 ring-app-neutral-lightest" />
-                  )}
-                </button>
-
-                {isNotificationOpen && (
-                  <NotificationPopup
-                    notifications={notifications}
-                    onClose={() => setIsNotificationOpen(false)}
-                    onNotificationClick={(notification) =>
-                      handleNotificationClick(notification.id)
-                    }
-                  />
-                )}
-              </div>
-
-              {/* Profile */}
-              <button
-                type="button"
-                onClick={handleProfileClick}
-                aria-label="Open profile"
-                className="size-9 overflow-hidden rounded-full border-2 border-white bg-app-primary shadow-sm"
-              >
-                {profile?.data?.profile_image && (
-                  <img
-                    src={getImageUrl(profile.data.profile_image)}
-                    alt={profile.data.name || "Profile"}
-                    className="h-full w-full object-cover"
-                  />
-                )}
-              </button>
               {isAuthenticated ? (
                 <>
                   {/* Notifications */}
@@ -230,56 +196,25 @@ export function Header() {
                     <button
                       type="button"
                       onClick={() =>
-                        setIsNotificationOpen(
-                          (prev) => !prev,
-                        )
+                        setIsNotificationOpen((prev) => !prev)
                       }
                       aria-label="Notifications"
-                      aria-expanded={
-                        isNotificationOpen
-                      }
-                      className="
-                        relative flex size-9
-                        items-center justify-center
-                        rounded-md
-                        bg-app-neutral-lightest
-                        text-app-secondary
-                        transition-colors
-                        hover:bg-app-primary-lightest
-                      "
+                      aria-expanded={isNotificationOpen}
+                      className="relative flex size-9 items-center justify-center rounded-md bg-app-neutral-lightest text-app-secondary transition-colors hover:bg-app-primary-lightest"
                     >
                       <Bell size={15} />
 
-                      {!isNotificationsLoading &&
-                        unreadCount > 0 && (
-                          <span
-                            className="
-                              absolute right-1 top-1
-                              size-2.5 rounded-full
-                              bg-green-500
-                              ring-2
-                              ring-app-neutral-lightest
-                            "
-                          />
-                        )}
+                      {!isNotificationsLoading && unreadCount > 0 && (
+                        <span className="absolute right-1 top-1 size-2.5 rounded-full bg-green-500 ring-2 ring-app-neutral-lightest" />
+                      )}
                     </button>
 
                     {isNotificationOpen && (
                       <NotificationPopup
-                        notifications={
-                          notifications
-                        }
-                        onClose={() =>
-                          setIsNotificationOpen(
-                            false,
-                          )
-                        }
-                        onNotificationClick={(
-                          notification,
-                        ) =>
-                          handleNotificationClick(
-                            notification.id,
-                          )
+                        notifications={notifications}
+                        onClose={() => setIsNotificationOpen(false)}
+                        onNotificationClick={(notification) =>
+                          handleNotificationClick(notification.id)
                         }
                       />
                     )}
@@ -288,38 +223,17 @@ export function Header() {
                   {/* Profile */}
                   <button
                     type="button"
-                    onClick={
-                      handleProfileClick
-                    }
+                    onClick={handleProfileClick}
                     aria-label="Open profile"
-                    className="
-                      size-9
-                      overflow-hidden
-                      rounded-full
-                      border-2 border-white
-                      bg-app-primary
-                      shadow-sm
-                    "
+                    className="size-9 overflow-hidden rounded-full border-2 border-white bg-app-primary shadow-sm"
                   >
-                    <img
-                      src={
-                        profile?.data
-                          ?.profile_image
-                          ? getImageUrl(
-                              profile.data
-                                .profile_image,
-                            )
-                          : "/images/avatar.png"
-                      }
-                      alt={
-                        profile?.data?.name ||
-                        "Profile"
-                      }
-                      className="
-                        h-full w-full
-                        object-cover
-                      "
-                    />
+                    {profile?.data?.profile_image && (
+                      <img
+                        src={getImageUrl(profile.data.profile_image)}
+                        alt={profile.data.name || "Profile"}
+                        className="h-full w-full object-cover"
+                      />
+                    )}
                   </button>
                 </>
               ) : (
