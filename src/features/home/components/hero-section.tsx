@@ -7,7 +7,17 @@ import {
 
 import { Link } from "react-router-dom";
 
+import { getImageUrl } from "@/utils/image-url";
+
+import { useReviews } from "../hooks/use-home";
+
 export function HeroSection() {
+  const { data: reviews = [] } = useReviews();
+
+  const patientImages = reviews
+    .filter((review) => review.patient?.profile_image)
+    .slice(0, 3);
+
   return (
     <section
       className="
@@ -95,9 +105,9 @@ export function HeroSection() {
             "
           >
             <div className="flex -space-x-2">
-              {[1, 2, 3].map((item) => (
+              {patientImages.map((review) => (
                 <div
-                  key={item}
+                  key={review.id}
                   className="
                     size-6 overflow-hidden
                     rounded-full border-2
@@ -105,8 +115,8 @@ export function HeroSection() {
                   "
                 >
                   <img
-                    src={`/images/patients/patient-${item}.jpg`}
-                    alt=""
+                    src={getImageUrl(review.patient.profile_image)}
+                    alt={review.patient.name}
                     className="h-full w-full object-cover"
                   />
                 </div>
@@ -153,7 +163,6 @@ export function HeroSection() {
               "
             >
               <CalendarDays size={14} />
-
               Book Appointment
             </Link>
           </div>
