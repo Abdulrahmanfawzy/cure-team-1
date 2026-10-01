@@ -1,6 +1,9 @@
 import { MapPin, Search } from "lucide-react";
+
 import { getImageUrl } from "@/utils/image-url";
+
 import { useNearbyDoctors } from "../hooks/use-home";
+
 export function LocationSection() {
   const {
     data: nearbyDoctors = [],
@@ -185,4 +188,3 @@ function DoctorMapPin({
     </div>
   );
 }
-
