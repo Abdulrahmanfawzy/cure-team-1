@@ -26,7 +26,9 @@ function LoginForm(): ReactNode {
     login.mutate(formData, {
       onSuccess: (data) => {
         toast.success(data.message);
-        navigate(`${PATHS.verifyOTP}?type=login&phone=${formData.phone}`);
+        navigate(
+          `${PATHS.verifyOTP}?type=login&phone=${encodeURIComponent(formData.phone)}`,
+        );
         reset();
       },
       onError: (error) => {
