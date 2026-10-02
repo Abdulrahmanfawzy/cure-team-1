@@ -35,7 +35,7 @@ function GoogleRegisterForm(): ReactNode {
       onSuccess: (data) => {
         toast.success(data.message);
         navigate(
-          `${PATHS.verifyOTP}?type=google-register&phone=${formData.phone}`,
+          `${PATHS.verifyOTP}?type=google-register&phone=${encodeURIComponent(formData.phone)}`,
         );
         reset();
       },
