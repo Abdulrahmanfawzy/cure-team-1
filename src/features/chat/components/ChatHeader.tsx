@@ -1,31 +1,33 @@
-import { MoreVertical, Phone, Video, PanelLeft } from 'lucide-react'
+import { MoreVertical, Phone, Video, PanelLeft } from "lucide-react";
 
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Button } from '@/components/ui/button'
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import {
   Sheet,
   SheetContent,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from '@/components/ui/sheet'
+} from "@/components/ui/sheet";
 
-import type { ActiveConversation, Conversation } from '../types/chat.types'
-import { ChatSidebar } from './ChatSidebar'
+import type { Conversation } from "../types/chat.types";
+import { ChatSidebar } from "./ChatSidebar";
 
 interface ChatHeaderProps {
-  conversation: ActiveConversation
-  selectedConversationId: string
-  searchValue: string
-  showUnreadOnly: boolean
-  onSearchChange: (value: string) => void
-  onConversationSelect: (conversation: Conversation) => void
-  onToggleUnread: () => void
-  onAction: (action: 'video' | 'phone' | 'more') => void
+  conversation: Conversation | null;
+  conversations: Conversation[];
+  selectedConversationId: string | null;
+  searchValue: string;
+  showUnreadOnly: boolean;
+  onSearchChange: (value: string) => void;
+  onConversationSelect: (conversation: Conversation) => void;
+  onToggleUnread: () => void;
+  onAction: (action: "video" | "phone" | "more") => void;
 }
 
 export function ChatHeader({
   conversation,
+  conversations,
   selectedConversationId,
   searchValue,
   showUnreadOnly,
@@ -34,15 +36,15 @@ export function ChatHeader({
   onToggleUnread,
   onAction,
 }: ChatHeaderProps) {
-  const initials = conversation.name
-    .split(' ')
+  const user = conversation?.other_user;
+  const initials = user?.name
+    .split(" ")
     .map((part) => part[0])
-    .join('')
-    .slice(0, 2)
+    .join("")
+    .slice(0, 2);
 
   return (
-    <header className="flex h-15 ps-5 pe-25 py-4 shrink-0 items-center justify-between border-b 
-    border-app-neutral-lighter ">
+    <header className="flex h-12 shrink-0 items-center justify-between border-b border-app-neutral-lighter px-3">
       <div className="flex min-w-0 items-center gap-2">
         <Sheet>
           <SheetTrigger asChild>
@@ -50,19 +52,20 @@ export function ChatHeader({
               type="button"
               variant="ghost"
               size="icon"
-              className="size-7 md:hidden"
+              className="size-8 md:hidden"
               aria-label="Open conversations"
             >
-              <PanelLeft className="size-6" />
+              <PanelLeft className="size-4" />
             </Button>
           </SheetTrigger>
 
-          <SheetContent side="left" className="w-[280px] p-0 sm:w-[320px]">
+          <SheetContent side="left" className="w-75 p-0 sm:w-85">
             <SheetHeader className="sr-only">
               <SheetTitle>Conversations</SheetTitle>
             </SheetHeader>
 
             <ChatSidebar
+              conversations={conversations}
               selectedConversationId={selectedConversationId}
               searchValue={searchValue}
               showUnreadOnly={showUnreadOnly}
@@ -73,56 +76,60 @@ export function ChatHeader({
           </SheetContent>
         </Sheet>
 
-        <Avatar className="size-12.5 shrink-0">
-          <AvatarImage src={conversation.avatar} alt={conversation.name} />
-          <AvatarFallback>{initials}</AvatarFallback>
-        </Avatar>
+        {user ? (
+          <>
+            <Avatar className="size-8 shrink-0">
+              <AvatarImage src={user.profile_image} alt={user.name} />
+              <AvatarFallback>{initials}</AvatarFallback>
+            </Avatar>
 
-        <div className="min-w-0">
-          <p className="truncate text-[16px] font-medium text-app-secondary">
-            {conversation.name}
+            <div className="min-w-0">
+              <p className="truncate text-sm font-medium text-app-secondary">
+                {user.name}
+              </p>
+              <p className="text-[10px] text-app-neutral-darker">
+                {user.role === "doctor" ? "Doctor" : "Patient"}
+              </p>
+            </div>
+          </>
+        ) : (
+          <p className="text-sm text-app-neutral-darker">
+            Select a conversation
           </p>
-
-          {conversation.isOnline && (
-            <p className="text-[10px] text-green-500">Online</p>
-          )}
-        </div>
+        )}
       </div>
 
-      <div className="flex shrink-0 items-center gap-4">
+      <div className="flex shrink-0 items-center gap-1">
         <Button
           type="button"
           variant="ghost"
           size="icon"
-          onClick={() => onAction('video')}
+          onClick={() => onAction("video")}
           aria-label="Start video call"
-          className="size-7 text-app-secondary"
         >
-          <Video className="size-6" />
+          <Video className="size-4" />
         </Button>
 
         <Button
           type="button"
           variant="ghost"
           size="icon"
-          onClick={() => onAction('phone')}
+          onClick={() => onAction("phone")}
           aria-label="Start voice call"
-          className="size-7 text-app-secondary"
         >
-          <Phone className="size-6" />
+          <Phone className="size-4" />
         </Button>
 
         <Button
           type="button"
           variant="ghost"
           size="icon"
-          onClick={() => onAction('more')}
+          onClick={() => onAction("more")}
           aria-label="More conversation options"
-          className="size-7 text-app-secondary"
         >
-          <MoreVertical className="size-6" />
+          <MoreVertical className="size-4" />
         </Button>
       </div>
     </header>
-  )
+  );
 }
