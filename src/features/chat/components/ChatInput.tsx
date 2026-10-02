@@ -1,38 +1,28 @@
-import { useRef, useState } from 'react'
+import { useRef, useState } from "react";
 
-import {
-  Camera,
-  Mic,
-  Paperclip,
-  Send,
-  Square,
-} from 'lucide-react'
+import { Camera, Mic, Paperclip, Send } from "lucide-react";
 
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 interface ChatInputProps {
-  onSend: (message: string) => void
+  onSend: (message: string) => void;
+  disabled?: boolean;
 }
 
-export function ChatInput({ onSend }: ChatInputProps) {
-  const [value, setValue] = useState('')
-  const [isRecording, setIsRecording] = useState(false)
+export function ChatInput({ onSend, disabled = false }: ChatInputProps) {
+  const [value, setValue] = useState("");
+  const attachmentRef = useRef<HTMLInputElement>(null);
+  const cameraRef = useRef<HTMLInputElement>(null);
 
-  const attachmentInputRef = useRef<HTMLInputElement>(null)
-  const cameraInputRef = useRef<HTMLInputElement>(null)
+  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
+    const content = value.trim();
+    if (!content || disabled) return;
 
-    const message = value.trim()
-
-    if (!message) {
-      return
-    }
-
-    onSend(message)
-    setValue('')
+    onSend(content);
+    setValue("");
   }
 
   return (
@@ -41,23 +31,19 @@ export function ChatInput({ onSend }: ChatInputProps) {
       className="flex shrink-0 items-center gap-2 border-t border-app-neutral-lighter px-3 py-2"
     >
       <input
-        ref={attachmentInputRef}
+        ref={attachmentRef}
         type="file"
         className="hidden"
-        onChange={() => {
-          setValue('Attachment selected')
-        }}
+        onChange={() => undefined}
       />
 
       <input
-        ref={cameraInputRef}
+        ref={cameraRef}
         type="file"
         accept="image/*,video/*"
         capture="environment"
         className="hidden"
-        onChange={() => {
-          setValue('Camera file selected')
-        }}
+        onChange={() => undefined}
       />
 
       <div className="relative min-w-0 flex-1">
@@ -65,77 +51,48 @@ export function ChatInput({ onSend }: ChatInputProps) {
           value={value}
           onChange={(event) => setValue(event.target.value)}
           placeholder="Message"
-          className="h-8 border-0 bg-app-neutral-lightest pr-16 text-4 shadow-none focus-visible:ring-1"
+          disabled={disabled}
+          className="h-9 border-0 bg-app-neutral-lightest pr-16 shadow-none focus-visible:ring-1"
         />
 
-        <div className="absolute top-1/2 right-1 flex -translate-y-1/2 items-center gap-0.5">
+        <div className="absolute right-1 top-1/2 flex -translate-y-1/2 items-center gap-0.5">
           <Button
             type="button"
             variant="ghost"
             size="icon"
-            onClick={() => attachmentInputRef.current?.click()}
             aria-label="Attach file"
-            className="size-6 text-app-neutral-darker"
+            onClick={() => attachmentRef.current?.click()}
+            className="size-7"
           >
-            <Paperclip className="size-6" />
+            <Paperclip className="size-4" />
           </Button>
 
           <Button
             type="button"
             variant="ghost"
             size="icon"
-            onClick={() => cameraInputRef.current?.click()}
             aria-label="Open camera"
-            className="size-6 text-app-neutral-darker"
+            onClick={() => cameraRef.current?.click()}
+            className="size-7"
           >
-            <Camera className="size-6" />
+            <Camera className="size-4" />
           </Button>
         </div>
       </div>
 
       <Button
-        type={isRecording ? 'button' : 'submit'}
-        onClick={
-          isRecording
-            ? () => setIsRecording(false)
-            : undefined
-        }
+        type="submit"
         size="icon"
-        aria-label={
-          isRecording
-            ? 'Stop recording'
-            : value.trim()
-              ? 'Send message'
-              : 'Start voice recording'
-        }
-        className={[
-          'size-8 shrink-0 rounded-md',
-          isRecording || value.trim()
-            ? 'bg-app-primary hover:bg-app-primary'
-            : 'bg-app-primary hover:bg-app-primary',
-        ].join(' ')}
+        aria-label="Send message"
+        disabled={disabled || !value.trim()}
+        className="size-9 shrink-0"
       >
-        {isRecording ? (
-          <Square className="size-3 fill-current" />
-        ) : value.trim() ? (
-          <Send className="size-3.5" />
+        {value.trim() ? (
+          <Send className="size-4" />
         ) : (
-          <Mic className="size-3.5" />
+          <Mic className="size-4" />
         )}
       </Button>
-
-      {!value.trim() && !isRecording && (
-        <Button
-          type="button"
-          variant="ghost"
-          size="icon"
-          onClick={() => setIsRecording(true)}
-          aria-label="Start voice recording"
-          className="hidden"
-        >
-          <Mic className='size-12' />
-        </Button>
-      )}
     </form>
-  )
+  );
 }
