@@ -5,7 +5,18 @@ export const PersonalInformationSchema = z.object({
   phone: z.string().trim().min(1, "Phone is required"),
   email: z.email("Email is invalid"),
   location: z.string().trim(),
-  birth_date: z.string().trim(),
+  birth_date: z
+    .string()
+    .trim()
+    .refine(
+      (birth_date) => {
+        const birthDate = new Date(birth_date);
+        if (Number.isNaN(birthDate.getTime())) return false;
+        const age = new Date().getFullYear() - birthDate.getFullYear();
+        return age >= 15;
+      },
+      { message: "You must be at least 15 years old" },
+    ),
 });
 
 // "id": "01a0e7db-8afe-711a-b590-bbf98e35cf7e",
