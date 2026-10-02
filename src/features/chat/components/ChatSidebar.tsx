@@ -1,44 +1,52 @@
-import { SlidersHorizontal } from 'lucide-react'
+import { SlidersHorizontal } from "lucide-react";
 
-import { Button } from '@/components/ui/button'
+import { Button } from "@/components/ui/button";
 
-import { conversations } from '../data/chat.data'
-import type { Conversation } from '../types/chat.types'
-import { ConversationItem } from './ConversationItem'
-import { ConversationSearch } from './ConversationSearch'
+import type { Conversation } from "../types/chat.types";
+import { ConversationItem } from "./ConversationItem";
+import { ConversationSearch } from "./ConversationSearch";
 
 interface ChatSidebarProps {
-  selectedConversationId: string
-  searchValue: string
-  showUnreadOnly: boolean
-  onSearchChange: (value: string) => void
-  onConversationSelect: (conversation: Conversation) => void
-  onToggleUnread: () => void
+  conversations: Conversation[];
+  selectedConversationId: string | null;
+  searchValue: string;
+  showUnreadOnly: boolean;
+  onSearchChange: (value: string) => void;
+  onConversationSelect: (conversation: Conversation) => void;
+  onToggleUnread: () => void;
+  isLoading?: boolean;
 }
 
 export function ChatSidebar({
+  conversations,
   selectedConversationId,
   searchValue,
   showUnreadOnly,
   onSearchChange,
   onConversationSelect,
   onToggleUnread,
+  isLoading = false,
 }: ChatSidebarProps) {
   const filteredConversations = conversations.filter((conversation) => {
-    const matchesSearch = conversation.name
+    const matchesSearch = conversation.other_user.name
       .toLowerCase()
-      .includes(searchValue.toLowerCase())
+      .includes(searchValue.trim().toLowerCase());
 
-    const matchesUnread =
-      !showUnreadOnly || Boolean(conversation.unreadCount)
+    const matchesUnread = !showUnreadOnly || conversation.unread_count > 0;
 
-    return matchesSearch && matchesUnread
-  })
+    return matchesSearch && matchesUnread;
+  });
 
   return (
-    <aside className="flex h-full w-full shrink-0 flex-col border-r border-app-neutral-lighter md:w-[210px] lg:w-[235px]">
-      <div className="flex h-10 shrink-0 items-center justify-between border-b border-app-neutral-lighter px-3">
-        <h1 className="text-5 font-medium text-app-secondary">Chat</h1>
+    <aside
+      className="flex h-full w-full shrink-0 flex-col border-r border-app-neutral-lighter
+     md:w-65 lg:w-75"
+    >
+      <div
+        className="flex h-12 shrink-0 items-center justify-between border-b 
+      border-app-neutral-lighter px-3"
+      >
+        <h1 className="text-sm font-medium text-app-secondary">Chat</h1>
 
         <Button
           type="button"
@@ -46,28 +54,22 @@ export function ChatSidebar({
           size="icon"
           onClick={onToggleUnread}
           aria-label={
-            showUnreadOnly
-              ? 'Show all conversations'
-              : 'Show unread conversations'
+            showUnreadOnly ? "Show all conversations" : "Show unread only"
           }
-          className={[
-            'size-6',
-            showUnreadOnly
-              ? 'bg-app-primary/10 text-app-primary'
-              : 'text-app-neutral-darker',
-          ].join(' ')}
+          className={showUnreadOnly ? "text-app-primary" : ""}
         >
-          <SlidersHorizontal className="size-5" />
+          <SlidersHorizontal className="size-4" />
         </Button>
       </div>
 
-      <ConversationSearch
-        value={searchValue}
-        onChange={onSearchChange}
-      />
+      <ConversationSearch value={searchValue} onChange={onSearchChange} />
 
       <div className="min-h-0 flex-1 overflow-y-auto">
-        {filteredConversations.length > 0 ? (
+        {isLoading ? (
+          <p className="px-3 py-6 text-center text-sm text-app-neutral-darker">
+            Loading conversations...
+          </p>
+        ) : filteredConversations.length > 0 ? (
           filteredConversations.map((conversation) => (
             <ConversationItem
               key={conversation.id}
@@ -77,11 +79,11 @@ export function ChatSidebar({
             />
           ))
         ) : (
-          <p className="px-3 py-6 text-center text-[9px] text-app-neutral-darker">
+          <p className="px-3 py-6 text-center text-sm text-app-neutral-darker">
             No conversations found
           </p>
         )}
       </div>
     </aside>
-  )
+  );
 }
